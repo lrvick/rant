@@ -1,0 +1,70 @@
+# Main Configuration (Required)
+url      : http://yoursite.com
+title    : Your Site Name
+subtitle : Your Subtitle Here
+author   : Your Name
+email    : your@email.com
+paginate : 10
+
+# Disqus Commenting
+disqus_shortname :
+
+# Google Analytics
+google_analytics_id :
+
+# Share Buttons
+share_googleplus : true
+share_twitter    : true
+share_facebook   : true
+share_reddit     : true
+share_hackernews : true
+
+# Sidebars / Buttons
+
+sidebar_defaults:
+  combined_feed    : true
+  combined_count   : 20
+
+github:
+  user             :
+  show_sidebar     : true
+  subscribe_button : true
+  item_count       : 4
+  skip_forks       : true
+
+twitter:
+  user             :
+  show_sidebar     : true
+  subscribe_button : true
+  item_count       : 4
+  show_replies     : true
+
+facebook:
+  user             :
+  show_sidebar     : true
+  subscribe_button : true
+  item_count       : 4
+
+googleplus:
+  user             :
+  show_sidebar     : true
+  subscribe_button : true
+  item_count       : 4
+
+youtube:
+  user             :
+  show_sidebar     : true
+  subscribe_button : true
+  item_count       : 4
+
+reddit:
+  user             :
+  show_sidebar     : true
+  subscribe_button : true
+  item_count       : 4
+
+delicious:
+  user             :
+  show_sidebar     : true
+  subscribe_button : true
+  item_count       : 4

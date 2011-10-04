@@ -1,4 +1,5 @@
 from rant.installer import install
+from rant.publisher import publish
 import os
 try:
     import argparse
@@ -17,12 +18,16 @@ def main():
     )
 
     subparsers.add_parser(
-        'post',
-        help='Create a new rant post in current directory'
+        'publish',
+        help='Create a new rant page/post in current directory'
     )
 
     args = parser.parse_args()
 
     if args.parser == 'install':
         install(os.getcwd())
+        pass
+
+    if args.parser == 'publish':
+        publish()
         pass

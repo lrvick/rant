@@ -42,12 +42,12 @@ and [Goldbarg](https://github.com/Schnouki/Golbarg)
 
     This will populate the folder with the basic rant project ready to add posts to.
 
-3.  Create a post
+3.  Create a post or page
 
     To make a first blog post do:
 
     ```bash
-    rant post
+    rant publish
     ```
 
     This will open vim with a template like the following:

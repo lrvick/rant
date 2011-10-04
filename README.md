@@ -67,17 +67,17 @@ and [Goldbarg](https://github.com/Schnouki/Golbarg)
     [Markdown](http://daringfireball.net/projects/markdown/) format.
 
     On saving it will automatically generate any needed html for the page
-    according to the 'post' templates found in '_layouts/post.html' .
+    according to the 'post' templates found in 'layouts/post.html' .
 
     To edit a post in the future simply do:
 
     ```bash
-    rant edit _posts/201109230245-My_neat_blog_post.md
+    rant edit posts/201109230245-My_neat_blog_post.md
     ```
 
     From here you can also modify any of the media found in /static, or edit
-    any of the [Jinja2](http://jinja.pocoo.org/) layouts found in '_layouts'
-    to your liking
+    any of the [Jinja2](http://jinja.pocoo.org/) layouts found in 'layouts'
+    to your liking.
 
     Happy ranting :-)
 

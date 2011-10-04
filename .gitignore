@@ -1,0 +1,7 @@
+*~
+~*
+.*
+*.pyc
+*.bak
+deploy/*
+*.egg-info

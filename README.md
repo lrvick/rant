@@ -20,6 +20,7 @@ and [Goldbarg](https://github.com/Schnouki/Golbarg)
 
   * Python 2.6 - 2.7
   * pip
+  * libyaml
 
 ## Usage / Installation ##
 
@@ -36,7 +37,7 @@ and [Goldbarg](https://github.com/Schnouki/Golbarg)
     ```bash
     mkdir my_rant_blog
     cd my_rant_blog
-    rant create
+    rant install
     ```
 
     This will populate the folder with the basic rant project ready to add posts to.

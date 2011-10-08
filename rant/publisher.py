@@ -26,7 +26,10 @@ def publish(layout='post'):
     for item in content:
         if 'layout' in item:
             headers = item
-    filename = '%s-%s.md' % (headers['date'].strftime("%Y%m%d%H%M%S"),headers['title'].replace(' ','_'))
-    filepath = '%s/posts/%s' % (os.getcwd(),filename)
+    if headers['layout'] == 'post':
+        filename = '%s-%s.md' % (headers['date'].strftime("%Y%m%d%H%M%S"),headers['title'].replace(' ','_'))
+    else:
+        filename = '%s.md' % (headers['title'].replace(' ','_'))
+    filepath = '%s/%ss/%s' % (os.getcwd(),headers['layout'],filename)
     shutil.copyfile(temp_fh.name,filepath)
     print "Saved to: %s" % filepath

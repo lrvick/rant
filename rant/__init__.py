@@ -1,5 +1,6 @@
 from rant.installer import install
 from rant.publisher import publish
+from rant.generator import generate
 import os
 try:
     import argparse
@@ -22,6 +23,11 @@ def main():
         help='Create a new rant page/post in current directory'
     )
 
+    subparsers.add_parser(
+        'generate',
+        help='Generate or update static site from all templates and content'
+    )
+
     args = parser.parse_args()
 
     if args.parser == 'install':
@@ -30,4 +36,8 @@ def main():
 
     if args.parser == 'publish':
         publish()
+        pass
+
+    if args.parser == 'generate':
+        generate()
         pass

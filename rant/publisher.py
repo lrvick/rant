@@ -1,7 +1,7 @@
 import os
 import tempfile
-import yaml
 import shutil
+import datetime
 from time import gmtime, strftime
 
 
@@ -13,7 +13,8 @@ def publish(layout='post'):
     template_fh = file(template, 'r')
     temp_fh = tempfile.NamedTemporaryFile(delete=False)
     line = template_fh.readline()
-    timestamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    date_format = '%Y-%m-%d %H:%M:%S'
+    timestamp = strftime(date_format, gmtime())
     while line:
         temp_fh.write(line)
         line = template_fh.readline()
@@ -22,14 +23,21 @@ def publish(layout='post'):
     temp_fh.close()
     os.system('vim %s' % temp_fh.name)
     temp_fh = file(temp_fh.name, 'r')
-    content = yaml.load_all(temp_fh)
-    for item in content:
-        if 'layout' in item:
-            headers = item
-    if headers['layout'] == 'post':
-        filename = '%s-%s.md' % (headers['date'].strftime("%Y%m%d%H%M%S"),headers['title'].replace(' ','_'))
+    line = temp_fh.readline()
+    while line:
+        if 'date' in line:
+            date = line.split(': ')[1].strip('\n ')
+        if 'title' in line:
+            title = line.split(':')[1].strip('\n ')
+        if 'layout' in line:
+            layout = line.split(':')[1].strip('\n ')
+        line = temp_fh.readline()
+    if layout == 'post':
+        datetime_obj = datetime.datetime.strptime(date,date_format)
+        timestamp = datetime_obj.strftime("%Y%m%d%H%M%S")
+        filename = '%s-%s.md' % (timestamp,title.replace(' ','_'))
     else:
-        filename = '%s.md' % (headers['title'].replace(' ','_'))
-    filepath = '%s/%ss/%s' % (os.getcwd(),headers['layout'],filename)
+        filename = '%s.md' % (title.replace(' ','_'))
+    filepath = '%s/%ss/%s' % (os.getcwd(),layout,filename)
     shutil.copyfile(temp_fh.name,filepath)
     print "Saved to: %s" % filepath

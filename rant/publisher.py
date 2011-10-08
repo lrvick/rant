@@ -1,8 +1,9 @@
 import os
 import tempfile
 import yaml
-import datetime
+import shutil
 from time import gmtime, strftime
+
 
 def publish(layout='post'):
     template = '%s/rant/defaults/layouts/publish.md' % os.path.dirname(os.getcwd())
@@ -25,8 +26,7 @@ def publish(layout='post'):
     for item in content:
         if 'layout' in item:
             headers = item
-        else:
-            body = item
-    print headers
-    print body
-
+    filename = '%s-%s.md' % (headers['date'].strftime("%Y%m%d%H%M%S"),headers['title'].replace(' ','_'))
+    filepath = '%s/posts/%s' % (os.getcwd(),filename)
+    shutil.copyfile(temp_fh.name,filepath)
+    print "Saved to: %s" % filepath

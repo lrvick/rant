@@ -2,7 +2,7 @@
 layout: post
 title:
 date:
-tags:
+tags: []
 comments: true
 draft: false
 ---

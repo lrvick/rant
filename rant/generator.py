@@ -29,7 +29,10 @@ def generate():
                 elif line:
                     content_text = "%s%s" % (content_text,line)
             headers = yaml.load(headers_text)
-            content = markdown.markdown(content_text,['codehilite(force_linenos=True)'])
+            content = markdown.markdown(
+                                content_text,
+                                ['codehilite(force_linenos=True)','tables']
+                            )
             template = env.get_template('%s.html' % layout)
             rendered_page = template.render(
                                 config=config,

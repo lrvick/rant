@@ -8,8 +8,11 @@ def generate():
     cwd = os.getcwd()
     config_file = file('%s/config.yml' % cwd)
     config = yaml.load(config_file)
-    #print config
     env = Environment(loader=FileSystemLoader('%s/layouts/' % cwd))
+    all_content = {
+        'post' : [],
+        'page' : []
+    }
     for layout in ['post','page']:
         content_files = os.listdir('%s/%ss' % (cwd,layout))
         for content_file in content_files:
@@ -29,6 +32,14 @@ def generate():
                 elif line:
                     content_text = "%s%s" % (content_text,line)
             headers = yaml.load(headers_text)
+            all_content[layout].append({
+                'headers' : headers,
+                'content_text' : content_text,
+            })
+    for layout in ['post','page']:
+        for item in all_content[layout]:
+            headers = item['headers']
+            content_text = item['content_text']
             content = markdown.markdown(
                                 content_text,
                                 ['codehilite(force_linenos=True)','tables']

@@ -1,6 +1,7 @@
 import os
 import yaml
 import markdown
+import re
 from jinja2 import Environment, FileSystemLoader
 
 def generate():
@@ -28,7 +29,7 @@ def generate():
                 elif line:
                     content_text = "%s%s" % (content_text,line)
             headers = yaml.load(headers_text)
-            content = markdown.markdown(content_text)
+            content = markdown.markdown(content_text,['codehilite(force_linenos=True)'])
             template = env.get_template('%s.html' % layout)
             rendered_page = template.render(
                                 config=config,
@@ -36,6 +37,15 @@ def generate():
                                 title=headers['title'],
                                 tags=headers['tags'],
                             )
-            print rendered_page
+            url_title = re.sub(r'\W+','', headers['title'])
+            if layout == 'page':
+                save_folder = '%s/deploy/%s' % (cwd,url_title)
+            elif layout == 'post':
+                save_folder = '%s/deploy/blog/%s' % (cwd,url_title)
+            if not os.path.isdir(save_folder):
+                os.makedirs(save_folder)
+            save_fh = open("%s/index.html" % save_folder,'w')
+            save_fh.write(rendered_page)
+            print "Rendered: '%s/index.html'" % save_folder
     print "Site Generated"
     pass

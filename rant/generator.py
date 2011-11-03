@@ -2,10 +2,12 @@ import os
 import yaml
 import markdown
 import re
+import time
 from fnmatch import fnmatch
 from jinja2 import Environment, FileSystemLoader
 
 def generate():
+    start_time = time.time()
     cwd = os.getcwd()
     config_file = file('%s/config.yml' % cwd)
     config = yaml.load(config_file)
@@ -111,4 +113,5 @@ def generate():
             save_fh = open("%s/index.html" % save_folder,'w')
             save_fh.write(rendered_page)
             print "-> '%s/'" % save_folder.replace('%s/deploy' % cwd,'')
-    print "\nGeneration Complete"
+    total_time = round(time.time() - start_time,2)
+    print "\nGeneration Completed in %s seconds" % total_time

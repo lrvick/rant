@@ -75,7 +75,6 @@ def generate():
         posts_processed += 1
         if len(page_posts) == per_page or posts_processed == post_count:
             page_num += 1
-            print page_num,total_pages
             rendered_page = index_template.render(
                                 config=config,
                                 page_posts=page_posts,
@@ -109,13 +108,14 @@ def generate():
                                 config=config,
                                 content=item['content'],
                                 title=item['title'],
+                                permalink=item['permalink'],
                                 navigation=navigation,
                                 tags=item['tags'],
                             )
             if layout == 'page':
                 save_folder = '%s/deploy/%s' % (cwd,item['permalink'])
             elif layout == 'post':
-                save_folder = '%s/deploy/blog/%s' % (cwd,permalink)
+                save_folder = '%s/deploy/blog/%s' % (cwd,item['permalink'])
             if not os.path.isdir(save_folder):
                 os.makedirs(save_folder)
             save_fh = open("%s/index.html" % save_folder,'w')

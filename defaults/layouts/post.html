@@ -2,11 +2,23 @@
 {% block content %}
   <article>
   <h2>{{ title }}</h2>
-    {{ content }}
+    {{ content|safe }}
     </article>
     <ul class="tags">
       {% for tag in tags %}
       <li>{{ tag }}</li>
       {% endfor %}
     </ul>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '{{ config.disqus_shortname }}';
+    var disqus_identifier = '{{ permalink }}';
+    var disqus_title = '{{ title }}';
+    var disqus_url = '{{config.url}}/blog/{{permalink}}';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
 {% endblock %}

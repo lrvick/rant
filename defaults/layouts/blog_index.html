@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% for post in page_posts %}
+    <h2><a href="/blog/{{ post.permalink }}">{{ post.title }}</a></h2>
+    <div class="date">{{ post.date }}</div>
+    <p>{{ post.content|striptags|truncate(255) }}</p>
+    <div class"tags">
+        {% for tag in post.tags %}
+        <span class='tag'>{{tag}}</span>
+        {% endfor %}
+    </div>
+    <a href='/blog/{{ post.permalink }}/'>Read More</a> | <a href='/blog/{{ post.permalink }}/#comments'>Comments</a>
+    {% endfor %}
+    <div class="pagination">
+    {% if page_num - 1 > 0 %}
+        <a href="/blog/pages/{{ page_num - 1 }}" class="prev">&laquo; previous </a>
+    {% else %}
+        <span class="prev disabled">&laquo; previous </span>
+    {% endif %}
+    {% for num in range(1,total_pages + 1) %}
+        {% if num == page_num %}
+            <span class="current page">{{ num }}</span>
+        {% else %}
+            <a href="/blog/pages/{{ num }}" class="page">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+    {% if page_num + 1 <= total_pages %}
+        <a href="/blog/pages/{{ page_num + 1 }}" class="next">next &raquo;</a>
+    {% else %}
+        <span class="next disabled">next &raquo;</span>
+    {% endif %}
+    </div>
+{% endblock %}

@@ -43,8 +43,10 @@ def generate():
                                 ['codehilite(force_linenos=True)','tables']
                             )
                 if not headers['draft']:
+                    permalink = re.sub("[^a-zA-Z0-9]+","_",headers['title']).lower()
                     all_content[layout].append({
                         'title' : headers['title'],
+                        'permalink' : permalink,
                         'tags' : headers['tags'],
                         'date' : headers['date'],
                         'comments' : headers['comments'],
@@ -63,17 +65,21 @@ def generate():
     print("="*50)
     per_page = config['paginate']
     post_count = len(all_content['post'])
+    total_pages = int(round(post_count / per_page,0))
     page_posts = []
-    page_num = 1
+    page_num = 0
     posts_processed = 0
     index_template = env.get_template('blog_index.html')
     for item in all_content['post']:
         page_posts.append(item)
         posts_processed += 1
         if len(page_posts) == per_page or posts_processed == post_count:
+            page_num += 1
+            print page_num,total_pages
             rendered_page = index_template.render(
                                 config=config,
                                 page_posts=page_posts,
+                                total_pages=total_pages,
                                 page_num=page_num,
                                 navigation=navigation,
                             )
@@ -82,13 +88,16 @@ def generate():
                 save_fh = open("%s/index.html" % save_folder,'w')
                 save_fh.write(rendered_page)
                 print "-> '/'"
+                save_folder = '%s/deploy/blog' % cwd
+                save_fh = open("%s/index.html" % save_folder,'w')
+                save_fh.write(rendered_page)
+                print "-> '/blog'"
             save_folder = '%s/deploy/blog/pages/%s' % (cwd,page_num)
             if not os.path.isdir(save_folder):
                 os.makedirs(save_folder)
             save_fh = open("%s/index.html" % save_folder,'w')
             save_fh.write(rendered_page)
             print "-> '%s/'" % save_folder.replace('%s/deploy' % cwd,'')
-            page_num += 1
             page_posts = []
 
     print "\nRendering HTML posts and pages from templates..."
@@ -103,9 +112,8 @@ def generate():
                                 navigation=navigation,
                                 tags=item['tags'],
                             )
-            permalink = re.sub("[^a-zA-Z0-9]+","_",item['title']).lower()
             if layout == 'page':
-                save_folder = '%s/deploy/%s' % (cwd,permalink)
+                save_folder = '%s/deploy/%s' % (cwd,item['permalink'])
             elif layout == 'post':
                 save_folder = '%s/deploy/blog/%s' % (cwd,permalink)
             if not os.path.isdir(save_folder):

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>{{ config.title }}</title>
+    <description>{{ config.subtitle }}</description>
+    <link>{{ config.url }}/blog/</link>
+    <lastBuildDate>{{ current_date.strftime("%a, %d %b %Y %H:%M:%S %z") }}</lastBuildDate>
+    <managingEditor>{{ config.email }} ({ config.author })</name>
+
+   {% for post in posts %}
+    <item>
+      <title>{{ post.title }}</title>
+      <link>{{ config.url }}/blog/{{ post.permalink}}</link>
+      <guid>{{ post.permalink }}</guid>
+      <description>{{ post.content|striptags|truncate(255) }}</description>
+      <pubDate>{{ post.date.strftime("%a, %d %b %Y %H:%M:%S %z") }}</pubDate>
+      <content:encoded>{{ post.content|striptags }}</content:encoded>
+    </item>
+    {% endfor %}
+  </channel>
+</rss>

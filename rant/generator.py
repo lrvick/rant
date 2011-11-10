@@ -3,6 +3,7 @@ import yaml
 import markdown
 import re
 import time
+import datetime
 from fnmatch import fnmatch
 from jinja2 import Environment, FileSystemLoader
 
@@ -121,5 +122,43 @@ def generate():
             save_fh = open("%s/index.html" % save_folder,'w')
             save_fh.write(rendered_page)
             print "-> '%s/'" % save_folder.replace('%s/deploy' % cwd,'')
+
+    print "\nGenerating XML Feeds..."
+    print("="*50)
+    current_date = datetime.datetime.fromtimestamp(start_time)
+    template = env.get_template('atom.xml')
+    rendered_page = template.render(
+                        config=config,
+                        posts=all_content['post'],
+                        current_date=current_date,
+                    )
+    save_folder = '%s/deploy/blog/' % (cwd)
+    save_fh = open("%s/atom.xml" % save_folder,'w')
+    save_fh.write(rendered_page)
+    print "-> '/blog/atom.xml'"
+    template = env.get_template('rss.xml')
+    rendered_page = template.render(
+                        config=config,
+                        posts=all_content['post'],
+                        current_date=current_date,
+                    )
+    save_folder = '%s/deploy/blog/' % (cwd)
+    save_fh = open("%s/rss.xml" % save_folder,'w')
+    save_fh.write(rendered_page)
+    print "-> '/blog/rss.xml'"
+    template = env.get_template('sitemap.xml')
+    rendered_page = template.render(
+                        config=config,
+                        pages=all_content['post'],
+                        posts=all_content['page'],
+                        current_date=current_date,
+                    )
+    save_folder = '%s/deploy/' % (cwd)
+    save_fh = open("%s/sitemap.xml" % save_folder,'w')
+    save_fh.write(rendered_page)
+    print "-> '/sitemap.xml'"
+
+
+
     total_time = round(time.time() - start_time,2)
     print "\nGeneration Completed in %s seconds" % total_time

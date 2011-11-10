@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{{ config.title }}</title>
+  <subtitle>{{ config.subtitle }}</subtitle>
+  <link href="{{ config.url }}/blog/atom.xml" rel="self"/>
+  <link href="{{ config.url }}/blog/"/>
+  <updated>{{ current_date.strftime("%Y-%m-%dT%H:%M:%SZ") }}</updated>
+
+  <author>
+    <name>{{ config.author }}</name>
+    <uri>{{ config.url }}</uri>
+  </author>
+
+ {% for post in posts %}
+  <entry>
+    <title>{{ post.title }}</title>
+    <link href="{{ config.url }}/blog/{{ post.permalink}}"/>
+    <updated>{{ post.date.strftime("%Y-%m-%dT%H:%M:%SZ") }}</updated>
+    <summary>{{ post.content|striptags|truncate(255) }}</summary>
+    <content type="html">{{ post.content|striptags }}</content>
+  </entry>
+{% endfor %}
+</feed>

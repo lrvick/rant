@@ -4,6 +4,8 @@ import markdown
 import re
 import time
 import datetime
+import codecs
+from collections import OrderedDict
 from fnmatch import fnmatch
 from jinja2 import Environment, FileSystemLoader
 
@@ -21,12 +23,13 @@ def generate():
         'page' : []
     }
     for layout in ['post','page']:
-        for content_file in os.listdir('%s/%ss' % (cwd,layout)):
+        content_files = sorted([f for f in os.listdir('%s/%ss' % (cwd,layout))],reverse=True)
+        for content_file in content_files:
             if fnmatch(content_file,'*.md'):
                 headers_text = ''
                 content_text = ''
                 headers_done = None
-                content_fh = file('%s/%ss/%s' % (cwd,layout,content_file))
+                content_fh = codecs.open('%s/%ss/%s' % (cwd,layout,content_file),'r','utf-8')
                 line = content_fh.readline()
                 while line:
                     line = content_fh.readline()
@@ -45,14 +48,12 @@ def generate():
                             )
                 if not headers['draft']:
                     permalink = re.sub("[^a-zA-Z0-9]+","_",headers['title']).lower()
-                    all_content[layout].append({
-                        'title' : headers['title'],
-                        'permalink' : permalink,
-                        'tags' : headers['tags'],
-                        'date' : headers['date'],
-                        'comments' : headers['comments'],
-                        'content' : content,
-                    })
+                    content_vars = {
+                      'permalink': permalink,
+                      'content' : content,
+                    }
+                    content_vars = dict(content_vars,**headers)
+                    all_content[layout].append(content_vars)
                 print "<- '%s'" % content_file
 
     print "\nGenerating Main Navigation..."
@@ -82,20 +83,21 @@ def generate():
                                 total_pages=total_pages,
                                 page_num=page_num,
                                 navigation=navigation,
+                                current_page = 'blog',
                             )
             if page_num == 1:
                 save_folder = '%s/deploy' % cwd
-                save_fh = open("%s/index.html" % save_folder,'w')
+                save_fh = codecs.open("%s/index.html" % save_folder,'w','utf-8')
                 save_fh.write(rendered_page)
                 print "-> '/'"
                 save_folder = '%s/deploy/blog' % cwd
-                save_fh = open("%s/index.html" % save_folder,'w')
+                save_fh = codecs.open("%s/index.html" % save_folder,'w','utf-8')
                 save_fh.write(rendered_page)
                 print "-> '/blog'"
             save_folder = '%s/deploy/blog/pages/%s' % (cwd,page_num)
             if not os.path.isdir(save_folder):
                 os.makedirs(save_folder)
-            save_fh = open("%s/index.html" % save_folder,'w')
+            save_fh = codecs.open("%s/index.html" % save_folder,'w','utf-8')
             save_fh.write(rendered_page)
             print "-> '%s/'" % save_folder.replace('%s/deploy' % cwd,'')
             page_posts = []
@@ -105,6 +107,10 @@ def generate():
     for layout in ['post','page']:
         for item in all_content[layout]:
             template = env.get_template('%s.html' % layout)
+            if layout == 'post':
+                current_page = 'blog'
+            else:
+                current_page = item['permalink']
             rendered_page = template.render(
                                 config=config,
                                 content=item['content'],
@@ -112,6 +118,7 @@ def generate():
                                 permalink=item['permalink'],
                                 navigation=navigation,
                                 tags=item['tags'],
+                                current_page = current_page,
                             )
             if layout == 'page':
                 save_folder = '%s/deploy/%s' % (cwd,item['permalink'])
@@ -119,7 +126,7 @@ def generate():
                 save_folder = '%s/deploy/blog/%s' % (cwd,item['permalink'])
             if not os.path.isdir(save_folder):
                 os.makedirs(save_folder)
-            save_fh = open("%s/index.html" % save_folder,'w')
+            save_fh = codecs.open("%s/index.html" % save_folder,'w','utf-8')
             save_fh.write(rendered_page)
             print "-> '%s/'" % save_folder.replace('%s/deploy' % cwd,'')
 
@@ -133,7 +140,7 @@ def generate():
                         current_date=current_date,
                     )
     save_folder = '%s/deploy/blog/' % (cwd)
-    save_fh = open("%s/atom.xml" % save_folder,'w')
+    save_fh = codecs.open("%s/atom.xml" % save_folder,'w','utf-8')
     save_fh.write(rendered_page)
     print "-> '/blog/atom.xml'"
     template = env.get_template('rss.xml')
@@ -143,7 +150,7 @@ def generate():
                         current_date=current_date,
                     )
     save_folder = '%s/deploy/blog/' % (cwd)
-    save_fh = open("%s/rss.xml" % save_folder,'w')
+    save_fh = codecs.open("%s/rss.xml" % save_folder,'w','utf-8')
     save_fh.write(rendered_page)
     print "-> '/blog/rss.xml'"
     template = env.get_template('sitemap.xml')
@@ -154,10 +161,9 @@ def generate():
                         current_date=current_date,
                     )
     save_folder = '%s/deploy/' % (cwd)
-    save_fh = open("%s/sitemap.xml" % save_folder,'w')
+    save_fh = codecs.open("%s/sitemap.xml" % save_folder,'w','utf-8')
     save_fh.write(rendered_page)
     print "-> '/sitemap.xml'"
-
 
 
     total_time = round(time.time() - start_time,2)

@@ -57,6 +57,7 @@ and [Goldbarg](https://github.com/Schnouki/Golbarg)
     layout: post
     title:
     date: 2011-09-23 02:45
+    image:
     tags:
     comments: true
     draft: false

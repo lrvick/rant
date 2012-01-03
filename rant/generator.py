@@ -107,17 +107,17 @@ def generate():
     for layout in ['post','page']:
         for item in all_content[layout]:
             template = env.get_template('%s.html' % layout)
+            title = None
             if layout == 'post':
                 current_page = 'blog'
+                title = item['title']
             else:
                 current_page = item['permalink']
             rendered_page = template.render(
+                                title=title,
                                 config=config,
-                                content=item['content'],
-                                title=item['title'],
-                                permalink=item['permalink'],
+                                content=item,
                                 navigation=navigation,
-                                tags=item['tags'],
                                 current_page = current_page,
                             )
             if layout == 'page':

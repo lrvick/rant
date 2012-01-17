@@ -14,13 +14,22 @@ and [Goldbarg](https://github.com/Schnouki/Golbarg)
 
 ## Current Features ##
 
-  * Nothing to see here yet! Just documenting things to come.
+  * Simple post/page authoring as markdown text files
+  * sitemap.xml support
+  * RSS / Atom support
+  * Full jinja2 templating integration
+  * Pagination
+  * Pygments syntax hilighting
+  * Disqus commenting integration in default templates
+  * Other stuff
 
 ## Requirements ##
 
   * Python 2.6 - 2.7
   * pip
   * libyaml
+  * jinja2
+  * pygments
 
 ## Usage / Installation ##
 

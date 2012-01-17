@@ -59,7 +59,7 @@ and [Goldbarg](https://github.com/Schnouki/Golbarg)
     rant publish
     ```
 
-    This will open vim with a template like the following:
+    This will open vim (default) with a template like the following:
 
     ```bash
     ---
@@ -80,10 +80,11 @@ and [Goldbarg](https://github.com/Schnouki/Golbarg)
     On saving it will automatically generate any needed html for the page
     according to the 'post' templates found in 'layouts/post.html' .
 
-    To edit a post in the future simply do:
+    To edit a post in the future simply edit it and regenerate.
 
     ```bash
-    rant edit posts/201109230245-My_neat_blog_post.md
+    vim posts/201109230245-My_neat_blog_post.md
+    rant generate
     ```
 
     From here you can also modify any of the media found in /static, or edit

@@ -5,7 +5,6 @@ import re
 import time
 import datetime
 import codecs
-from collections import OrderedDict
 from fnmatch import fnmatch
 from jinja2 import Environment, FileSystemLoader
 

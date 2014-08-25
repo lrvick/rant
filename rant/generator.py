@@ -11,12 +11,12 @@ from jinja2 import Environment, FileSystemLoader
 def generate():
     start_time = time.time()
     cwd = os.getcwd()
-    config_file = file('%s/config.yml' % cwd)
+    config_file = open('%s/config.yml' % cwd)
     config = yaml.load(config_file)
     env = Environment(loader=FileSystemLoader('%s/layouts/' % cwd))
 
-    print "\nParsing all posts and pages..."
-    print("="*50)
+    print("\nParsing all posts and pages...")
+    print(("="*50))
     all_content = {
         'post' : [],
         'page' : []
@@ -53,17 +53,17 @@ def generate():
                     }
                     content_vars = dict(content_vars,**headers)
                     all_content[layout].append(content_vars)
-                print "<- '%s'" % content_file
+                print("<- '%s'" % content_file)
 
-    print "\nGenerating Main Navigation..."
-    print("="*50)
+    print("\nGenerating Main Navigation...")
+    print(("="*50))
     navigation = ['blog']
     for item in all_content['page']:
         navigation.append(item['title'].lower())
-    print '-> %s' % navigation
+    print('-> %s' % navigation)
 
-    print "\nGenerating HTML blog index from templates..."
-    print("="*50)
+    print("\nGenerating HTML blog index from templates...")
+    print(("="*50))
     per_page = config['paginate']
     post_count = len(all_content['post'])
     total_pages = int(round(post_count / per_page,0))
@@ -88,21 +88,23 @@ def generate():
                 save_folder = '%s/deploy' % cwd
                 save_fh = codecs.open("%s/index.html" % save_folder,'w','utf-8')
                 save_fh.write(rendered_page)
-                print "-> '/'"
+                print("-> '/'")
                 save_folder = '%s/deploy/blog' % cwd
+                if not os.path.isdir(save_folder):
+                    os.makedirs(save_folder)
                 save_fh = codecs.open("%s/index.html" % save_folder,'w','utf-8')
                 save_fh.write(rendered_page)
-                print "-> '/blog'"
+                print("-> '/blog'")
             save_folder = '%s/deploy/blog/pages/%s' % (cwd,page_num)
             if not os.path.isdir(save_folder):
                 os.makedirs(save_folder)
             save_fh = codecs.open("%s/index.html" % save_folder,'w','utf-8')
             save_fh.write(rendered_page)
-            print "-> '%s/'" % save_folder.replace('%s/deploy' % cwd,'')
+            print("-> '%s/'" % save_folder.replace('%s/deploy' % cwd,''))
             page_posts = []
 
-    print "\nRendering HTML posts and pages from templates..."
-    print("="*50)
+    print("\nRendering HTML posts and pages from templates...")
+    print(("="*50))
     for layout in ['post','page']:
         for item in all_content[layout]:
             template = env.get_template('%s.html' % layout)
@@ -127,10 +129,10 @@ def generate():
                 os.makedirs(save_folder)
             save_fh = codecs.open("%s/index.html" % save_folder,'w','utf-8')
             save_fh.write(rendered_page)
-            print "-> '%s/'" % save_folder.replace('%s/deploy' % cwd,'')
+            print("-> '%s/'" % save_folder.replace('%s/deploy' % cwd,''))
 
-    print "\nGenerating XML Feeds..."
-    print("="*50)
+    print("\nGenerating XML Feeds...")
+    print(("="*50))
     current_date = datetime.datetime.fromtimestamp(start_time)
     template = env.get_template('atom.xml')
     rendered_page = template.render(
@@ -141,7 +143,7 @@ def generate():
     save_folder = '%s/deploy/blog/' % (cwd)
     save_fh = codecs.open("%s/atom.xml" % save_folder,'w','utf-8')
     save_fh.write(rendered_page)
-    print "-> '/blog/atom.xml'"
+    print("-> '/blog/atom.xml'")
     template = env.get_template('rss.xml')
     rendered_page = template.render(
                         config=config,
@@ -151,7 +153,7 @@ def generate():
     save_folder = '%s/deploy/blog/' % (cwd)
     save_fh = codecs.open("%s/rss.xml" % save_folder,'w','utf-8')
     save_fh.write(rendered_page)
-    print "-> '/blog/rss.xml'"
+    print("-> '/blog/rss.xml'")
     template = env.get_template('sitemap.xml')
     rendered_page = template.render(
                         config=config,
@@ -162,8 +164,8 @@ def generate():
     save_folder = '%s/deploy/' % (cwd)
     save_fh = codecs.open("%s/sitemap.xml" % save_folder,'w','utf-8')
     save_fh.write(rendered_page)
-    print "-> '/sitemap.xml'"
+    print("-> '/sitemap.xml'")
 
 
     total_time = round(time.time() - start_time,2)
-    print "\nGeneration Completed in %s seconds" % total_time
+    print("\nGeneration Completed in %s seconds" % total_time)

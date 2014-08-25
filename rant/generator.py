@@ -108,19 +108,16 @@ def generate():
     for layout in ['post','page']:
         for item in all_content[layout]:
             template = env.get_template('%s.html' % layout)
-            title = None
             if layout == 'post':
                 current_page = 'blog'
-                title = item['title']
             else:
                 current_page = item['permalink']
-            rendered_page = template.render(
-                                title=title,
-                                config=config,
-                                content=item,
-                                navigation=navigation,
-                                current_page = current_page,
-                            )
+            context = item
+            context['config'] = config
+            context['navigation'] = navigation
+            context['current_page'] = current_page
+
+            rendered_page = template.render(context)
             if layout == 'page':
                 save_folder = '%s/deploy/%s' % (cwd,item['permalink'])
             elif layout == 'post':

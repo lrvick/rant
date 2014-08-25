@@ -11,18 +11,20 @@
     <link rel="icon" href="/img/favicon.png">
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feeds/rss.xml">
     <link rel="stylesheet" type="text/css" media="screen" href="css/default.css">
-    <title>{% block title %}{% endblock %} - {{ config.title}}</title>
+    <title>{% if title%}{{ title|capitalize }} - {% endif %}{{ current_page|capitalize }} - {{ config.title}}</title>
   </head>
   <body>
     <header>
     <h1>{{ config.title }}</h1>
     <nav>
     {% for item in navigation %}
-      <a href="{{ item.href }}">{{ item.name }}</a>
+      <a href="/{{ item }}/" {% if current_page == item %}class="current"{% endif %}>{{ item|title }}</a>
     {% endfor %}
     </nav>
     </header>
+    <article>
     {% block content %}{% endblock %}
+    </article>
     {% include 'asides.html' ignore missing %}
     <footer>
     Powered by <a href="http://github.com/lrvick/rant">rant</a>

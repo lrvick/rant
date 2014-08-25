@@ -1,24 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
   <article>
-  <h2>{{ title }}</h2>
+    <h2>{{ title }}</h2>
+    <p class="entry-timeauthor">
+      Posted on:
+      <time>
+        <span>{{ date.strftime('%d') }}</span>
+        <span>{{ date.strftime('%b') }}</span>
+        <span>{{ date.strftime('%Y') }}</span>
+      </time>
+    </p>
     {{ content|safe }}
+  </article>
+    <h2 class="comments">Comments</h2>
+    <article id="disqus_thread">
     </article>
-    <ul class="tags">
-      {% for tag in tags %}
-      <li>{{ tag }}</li>
-      {% endfor %}
-    </ul>
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = '{{ config.disqus_shortname }}';
-    var disqus_identifier = '{{ permalink }}';
-    var disqus_title = '{{ title }}';
-    var disqus_url = '{{config.url}}/blog/{{permalink}}';
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    <script type="text/javascript">
+      var disqus_shortname = '{{ config.disqus_shortname }}';
+      var disqus_identifier = '{{ permalink }}';
+      var disqus_title = '{{ title }}';
+      var disqus_url = '{{config.url}}/blog/{{permalink}}/';
+      (function() {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
         dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
+      })();
+    </script>
 {% endblock %}

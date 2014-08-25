@@ -25,7 +25,7 @@ and [Goldbarg](https://github.com/Schnouki/Golbarg)
 
 ## Requirements ##
 
-  * Python 2.6 - 2.7
+  * Python 2.7+
   * pip
   * libyaml
   * jinja2
@@ -36,7 +36,7 @@ and [Goldbarg](https://github.com/Schnouki/Golbarg)
 1. Install rant
 
     ```bash
-    pip install -e git+https://github.com/lrvick/rant/#egg=rant
+    pip install rant
     ```
 
 2. Start a new rant project
@@ -59,7 +59,7 @@ and [Goldbarg](https://github.com/Schnouki/Golbarg)
     rant publish
     ```
 
-    This will open vim (default) with a template like the following:
+    This will open your default $EDITOR with a template like the following:
 
     ```bash
     ---
@@ -93,12 +93,20 @@ and [Goldbarg](https://github.com/Schnouki/Golbarg)
 
     Happy ranting :-)
 
-
 ## Notes ##
 
-Many more features coming soon as this project is under active development.
+  Use at your own risk. You may be eaten by a grue.
 
-This is by no means production-ready code. Do not actually use it in
-production unless you wish to be eaten by a grue.
+  Questions/Comments?
 
-Questions/Comments? Please check us out on IRC via irc://udderweb.com/#uw
+  You can find me on the web via:
+
+  [Email](mailto://lance@lrvick.net) |
+  [Blog](http://lrvick.net) |
+  [Twitter](http://twitter.com/lrvick) |
+  [Facebook](http://facebook.com/lrvick) |
+  [Google+](http://plus.google.com/109278148620470841006) |
+  [YouTube](http://youtube.com/lrvick) |
+  [Last.fm](http://last.fm/user/lrvick) |
+  [LinkedIn](http://linkedin.com/in/lrvick) |
+  [Github](http://github.com/lrvick/)

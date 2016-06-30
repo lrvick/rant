@@ -3,5 +3,7 @@
 .*
 *.pyc
 *.bak
-deploy/*
 *.egg-info
+deploy/*
+build/*
+dist/*

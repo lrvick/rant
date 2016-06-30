@@ -43,7 +43,7 @@ def generate():
                 headers = yaml.load(headers_text)
                 content = markdown.markdown(
                                 content_text,
-                                ['codehilite(force_linenos=True)','tables']
+                                ['codehilite(linenums=True)','tables']
                             )
                 if not headers['draft']:
                     permalink = re.sub("[^a-zA-Z0-9]+","_",headers['title']).lower()

@@ -15,10 +15,9 @@ setup(
     data_files=[(d, [os.path.join(d,f) for f in files])
         for d, folders, files in os.walk('defaults')],
     install_requires=[
-        'feedgenerator',
-        'jinja2',
-        'markdown',
-        'pyyaml',
-        'pygments',
+        'setuptools == 20.10.1',
+        'Jinja2 == 2.8',
+        'Markdown == 2.6.6',
+        'PyYAML == 3.11'
     ]
 )

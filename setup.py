@@ -1,4 +1,5 @@
 from setuptools import setup
+import os
 
 setup(
     name='rant',
@@ -11,6 +12,8 @@ setup(
     license='LICENSE.md',
     description='A CLI driven blog-aware website generator. It is intended to make maintianing a blog or personal website easy using only your favorite console editor such as Vim, and a few simple commands',
     long_description=open('README.md').read(),
+    data_files=[(d, [os.path.join(d,f) for f in files])
+        for d, folders, files in os.walk('defaults')],
     install_requires=[
         'feedgenerator',
         'jinja2',

@@ -21,5 +21,4 @@ setup(
         'pyyaml',
         'pygments',
     ]
-
 )

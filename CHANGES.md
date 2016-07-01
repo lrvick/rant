@@ -1,6 +1,12 @@
 rant Changelog
 ==============
 
+Version 0.2.2
+-------------
+
+- Start signing releases
+
+
 Version 0.2.1
 -------------
 

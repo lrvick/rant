@@ -3,7 +3,7 @@ import os
 
 setup(
     name='rant',
-    version='0.2.1',
+    version='0.2.2',
     author='Lance R. Vick',
     author_email='lance@lrvick.net',
     packages=['rant'],

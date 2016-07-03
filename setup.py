@@ -25,10 +25,12 @@ setup(
             '../defaults/*/*'
         ]
     },
+    test_suite='tests',
     tests_require=[
         'flake8',
         'wheel',
         'tox',
+        'mock',
     ],
     install_requires=[
         'setuptools == 20.10.1',

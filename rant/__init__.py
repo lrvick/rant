@@ -1,11 +1,12 @@
 from rant.installer import install
 from rant.publisher import publish
-from rant.generator import generate
+from rant.generator import Generator
 import os
 try:
     import argparse
 except ImportError:
     raise
+
 
 def main():
 
@@ -39,5 +40,6 @@ def main():
         pass
 
     if args.parser == 'generate':
-        generate()
+        generator = Generator('.', 'deploy')
+        generator.generate()
         pass

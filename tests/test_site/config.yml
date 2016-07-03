@@ -1,0 +1,14 @@
+# Main Configuration (Required)
+url         : http://yoursite.com
+title       : Your Site Name
+subtitle    : Your Subtitle Here
+description : Your Description Here
+author      : Your Name
+email       : your@email.com
+paginate    : 10
+
+# Disqus Commenting
+disqus_shortname :
+
+# Google Analytics
+google_analytics_id :

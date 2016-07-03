@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="description" content="{{ config.description }}">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="MobileOptimized" content="320">
+    <link rel="icon" href="/img/favicon.png">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feeds/rss.xml">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/default.css">
+    <title>{% if title%}{{ title|capitalize }} - {% endif %}{{ current_page|capitalize }} - {{ config.title}}</title>
+  </head>
+  <body>
+    <header>
+    <h1>{{ config.title }}</h1>
+    <nav>
+    {% for item in navigation %}
+      <a href="/{{ item }}/" {% if current_page == item %}class="current"{% endif %}>{{ item|title }}</a>
+    {% endfor %}
+    </nav>
+    </header>
+    <article>
+    {% block content %}{% endblock %}
+    </article>
+    {% include 'asides.html' ignore missing %}
+    <footer>
+    Powered by <a href="http://github.com/lrvick/rant">rant</a>
+    </footer>
+  </body>
+</html>

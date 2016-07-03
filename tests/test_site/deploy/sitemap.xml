@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://yoursite.com/blog/test_page</loc>
+    <lastmod>2016-07-03T00:16:04Z</lastmod>
+    <priority>0.6</priority>
+  </url>
+  
+  
+  <url>
+    <loc>http://yoursite.com/test_post</loc>
+    <lastmod>2016-07-02T21:01:16Z</lastmod>
+  </url>
+  
+</urlset>

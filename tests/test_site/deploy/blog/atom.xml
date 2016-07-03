@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Your Site Name</title>
+  <subtitle>Your Subtitle Here</subtitle>
+  <link href="http://yoursite.com/blog/atom.xml" rel="self"/>
+  <link href="http://yoursite.com/blog/"/>
+  <updated>2016-07-03T02:47:22Z</updated>
+
+  <author>
+    <name>Your Name</name>
+    <uri>http://yoursite.com</uri>
+  </author>
+
+ 
+  <entry>
+    <title>test post</title>
+    <link href="http://yoursite.com/blog/test_post"/>
+    <updated>2016-07-02T21:01:16Z</updated>
+    <summary>Test Post</summary>
+    <content type="html">Test Post</content>
+  </entry>
+
+</feed>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Your Site Name</title>
+    <description>Your Subtitle Here</description>
+    <link>http://yoursite.com/blog/</link>
+    <lastBuildDate>Sun, 03 Jul 2016 02:47:22 </lastBuildDate>
+    <managingEditor>your@email.com ({ config.author })</name>
+
+   
+    <item>
+      <title>test post</title>
+      <link>http://yoursite.com/blog/test_post</link>
+      <guid>test_post</guid>
+      <description>Test Post</description>
+      <pubDate>Sat, 02 Jul 2016 21:01:16 </pubDate>
+      <content:encoded>Test Post</content:encoded>
+    </item>
+    
+  </channel>
+</rss>

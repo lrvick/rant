@@ -24,7 +24,6 @@ class Generator(object):
         self._env = Environment(
             loader=FileSystemLoader('%s/layouts/' % self._source_dir)
         )
-        self.all_content = {}
 
     def _find_source_files(self, layout):
         source_files = []
@@ -68,124 +67,132 @@ class Generator(object):
         )
         if headers['draft']:
             return None
-        permalink = re.sub("[^a-zA-Z0-9]+", "_", headers['title']).lower()
+        permalink = '%s%s' % (
+            'blog/' if headers['layout'] == 'post' else '',
+            re.sub("[^a-zA-Z0-9]+", "_", headers['title']).lower()
+        )
         content_vars = {
           'permalink': permalink,
           'content': content,
         }
         return dict(content_vars, **headers)
 
-    def _render_html(self, context, layout):
-        template = self._env.get_template('%s.html' % layout)
-        if layout == 'post':
+    def _render_html(self, context):
+        template = self._env.get_template('%s.html' % context['layout'])
+        current_page = context['permalink']
+        if context['layout'] == 'post':
             current_page = 'blog'
-        else:
-            current_page = context['permalink']
         context['config'] = self.config
         context['navigation'] = self._navigation
         context['current_page'] = current_page
         return template.render(context)
 
-    def _write_html(self, html, permalink, layout):
-        if layout == 'page':
-            save_folder = '%s/%s' % (self._dest_dir, permalink)
-        elif layout == 'post':
-            save_folder = '%s/blog/%s' % (self._dest_dir, permalink)
+    def _write_file(self, html, permalink):
+        save_folder = '%s/%s' % (self._dest_dir, permalink)
         if not os.path.isdir(save_folder):
             os.makedirs(save_folder)
-
         save_fh = codecs.open("%s/index.html" % save_folder, 'w', 'utf-8')
         save_fh.write(html)
 
-    def _gen_blog_index_page(self, page_posts, page_num):
+    def _gen_contexts(self, filenames):
+        contexts = []
+        for filename in filenames:
+            context = self._parse_file(filename)
+            if context is None:
+                break
+            context['rendered_html'] = self._render_html(context)
+            contexts.append(context)
+        return contexts
+
+    def _write_contexts(self, contexts):
+        for context in contexts:
+            self._write_file(context['rendered_html'], context['permalink'])
+
+    def _render_blog_index_page(self, page_posts, page_num):
         post_count = len(self._post_files)
         total_index_pages = int(round(post_count / self._per_page, 0))
         index_template = self._env.get_template('blog_index.html')
         rendered_page = index_template.render(
-            config=self._config,
+            config=self.config,
             page_posts=page_posts,
             total_pages=total_index_pages,
             page_num=page_num,
             navigation=self._navigation,
             current_page='blog',
         )
-        if page_num == 1:
-            save_folder = '%s' % self._dest_dir
-            save_fh = codecs.open("%s/index.html" % save_folder, 'w', 'utf-8')
-            save_fh.write(rendered_page)
-            save_folder = '%s/blog' % self._dest_dir
-            if not os.path.isdir(self._dest_dir):
-                os.makedirs(save_folder)
-            save_fh = codecs.open("%s/index.html" % save_folder, 'w', 'utf-8')
-            save_fh.write(rendered_page)
-        save_folder = '%s/blog/pages/%s' % (self._dest_dir, page_num)
-        if not os.path.isdir(save_folder):
-            os.makedirs(save_folder)
-        save_fh = codecs.open("%s/index.html" % save_folder, 'w', 'utf-8')
-        save_fh.write(rendered_page)
+        return rendered_page
 
-    def _gen_posts(self):
-        post_files = self._find_source_files('post')
+    def _write_blog_index_page(self, page_posts, page_num):
+        rendered_page = self._render_blog_index_page(page_posts, page_num)
+        if page_num == 1:
+            self._write_file(rendered_page, '')
+            self._write_file(rendered_page, 'blog')
+        self._write_file(
+            rendered_page,
+            'blog/pages/%s' % page_num
+        )
+
+    def _write_blog_index(self, posts):
         index_page_posts = []
-        page_num = 0
-        for filename in post_files:
-            context = self._parse_file(filename)
-            self.all_content['posts'][filename] = context
-            index_page_posts.append(filename)
-            if len(self._page_posts) == self._per_page:
-                self._gen_blog_index_page(index_page_posts, page_num)
+        posts_processed = 0
+        page_num = 1
+        for post in posts:
+            index_page_posts.append(post)
+            if len(index_page_posts) == self._per_page \
+                    or posts_processed == len(posts):
+
+                print("GEN INDEX", index_page_posts)
+                self._write_blog_index_page(index_page_posts, page_num)
                 page_num += 1
                 index_page_posts = []
-                rendered_page = self._render_html(context, 'post')
-                self._write_html(rendered_page, context['permalink'], 'post')
-
-    def _gen_pages(self):
-        for filename in self._page_files:
-            context = self._parse_file(filename)
-            self.all_content['pages'][filename] = context
-            rendered_page = self._render_html(context, 'page')
-            self._write_html(rendered_page, context['permalink'], 'page')
+            posts_processed += 1
 
     def generate(self):
         start_time = time.time()
 
-        self._gen_pages()
-        self._gen_posts()
+        page_contexts = self._gen_contexts(self._page_files)
+        self._write_contexts(page_contexts)
+        post_contexts = self._gen_contexts(self._post_files)
+        self._write_contexts(post_contexts)
 
-        # print("\nGenerating XML Feeds...")
-        # print(("="*50))
-        # current_date = datetime.datetime.fromtimestamp(start_time)
-        # template = env.get_template('atom.xml')
-        # rendered_page = template.render(
-        #                     config=config,
-        #                     posts=all_content['post'],
-        #                     current_date=current_date,
-        #                 )
-        # save_folder = '%s/deploy/blog/' % (cwd)
-        # save_fh = codecs.open("%s/atom.xml" % save_folder,'w','utf-8')
-        # save_fh.write(rendered_page)
-        # print("-> '/blog/atom.xml'")
-        # template = env.get_template('rss.xml')
-        # rendered_page = template.render(
-        #                     config=config,
-        #                     posts=all_content['post'],
-        #                     current_date=current_date,
-        #                 )
-        # save_folder = '%s/deploy/blog/' % (cwd)
-        # save_fh = codecs.open("%s/rss.xml" % save_folder,'w','utf-8')
-        # save_fh.write(rendered_page)
-        # print("-> '/blog/rss.xml'")
-        # template = env.get_template('sitemap.xml')
-        # rendered_page = template.render(
-        #                     config=config,
-        #                     pages=all_content['post'],
-        #                     posts=all_content['page'],
-        #                     current_date=current_date,
-        #                 )
-        # save_folder = '%s/deploy/' % (cwd)
-        # save_fh = codecs.open("%s/sitemap.xml" % save_folder,'w','utf-8')
-        # save_fh.write(rendered_page)
-        # print("-> '/sitemap.xml'")
+        self._write_blog_index(post_contexts)
+
+        """
+        print("\nGenerating XML Feeds...")
+        print(("="*50))
+        current_date = datetime.datetime.fromtimestamp(start_time)
+        template = env.get_template('atom.xml')
+        rendered_page = template.render(
+                            config=config,
+                            posts=all_content['post'],
+                            current_date=current_date,
+                        )
+        save_folder = '%s/deploy/blog/' % (cwd)
+        save_fh = codecs.open("%s/atom.xml" % save_folder,'w','utf-8')
+        save_fh.write(rendered_page)
+        print("-> '/blog/atom.xml'")
+        template = env.get_template('rss.xml')
+        rendered_page = template.render(
+                            config=config,
+                            posts=all_content['post'],
+                            current_date=current_date,
+                        )
+        save_folder = '%s/deploy/blog/' % (cwd)
+        save_fh = codecs.open("%s/rss.xml" % save_folder,'w','utf-8')
+        save_fh.write(rendered_page)
+        print("-> '/blog/rss.xml'")
+        template = env.get_template('sitemap.xml')
+        rendered_page = template.render(
+                            config=config,
+                            pages=all_content['post'],
+                            posts=all_content['page'],
+                            current_date=current_date,
+                        )
+        save_folder = '%s/deploy/' % (cwd)
+        save_fh = codecs.open("%s/sitemap.xml" % save_folder,'w','utf-8')
+        save_fh.write(rendered_page)
+        print("-> '/sitemap.xml'")
+        """
 
         total_time = round(time.time() - start_time, 2)
         print("\nGeneration Completed in %s seconds" % total_time)

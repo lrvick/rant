@@ -135,57 +135,62 @@ class TestGenerate(TestCase):
     def test_gen_contexts(self):
         post = TEST_POST_PARSED.copy()
         post['rendered_html'] = self.generator._render_html(post)
-
         self.assertEqual(
             self.generator._gen_contexts([TEST_POST]),
             [post]
         )
+
+    def test_gen_contexts_draft(self):
+        self.generator._parse_file = MagicMock(return_value=None)
+        self.assertEqual(
+            self.generator._gen_contexts([TEST_POST]),
+            []
+        )
+
+    def test_write_contexts(self):
+        self.generator._write_file = write_file = MagicMock()
+        post = TEST_POST_PARSED.copy()
+        post['rendered_html'] = self.generator._render_html(post)
+        self.generator._write_contexts([post, post, post])
+        self.assertEqual(write_file.call_count, 3)
+
+    def test_write_blog_index(self):
+        post = TEST_POST_PARSED.copy()
+        post['rendered_html'] = self.generator._render_html(post)
+        self.generator._per_page = 2
+        self.generator._write_blog_index_page = \
+            write_blog_index_page = MagicMock()
+        self.generator._write_blog_index([post, post, post])
+        self.assertEqual(write_blog_index_page.call_count, 2)
+
+    def test_write_feed(self):
+        post = TEST_POST_PARSED.copy()
+        self.generator._write_file = write_file = MagicMock()
+        self.generator._write_feed('rss', [post, post, post])
+        write_file.assert_called_once_with(ANY, 'blog', 'rss.xml')
+
+    def test_write_sitemap(self):
+        post = TEST_POST_PARSED.copy()
+        page = TEST_POST_PARSED.copy()
+        self.generator._write_file = write_file = MagicMock()
+        self.generator._write_sitemap([post, post, post], [page, page, page])
+        write_file.assert_called_once_with(ANY, '', 'sitemap.xml')
 
     def test_generate(self):
         self.generator._write_contexts = write_contexts = MagicMock()
         self.generator._gen_contexts = gen_contexts = MagicMock()
         self.generator._write_contexts = write_contexts = MagicMock()
         self.generator._write_blog_index = write_blog_index = MagicMock()
+        self.generator._write_feed = write_feed = MagicMock()
 
         self.generator.generate()
         self.assertEqual(gen_contexts.call_count, 2)
         self.assertEqual(write_contexts.call_count, 2)
         write_blog_index.assert_called_once()
-
-"""
-    def test_gen_posts_single(self):
-        self.generator._write_file = MagicMock()
-        self.generator._gen_blog_index_page = MagicMock()
-
-        self.generator._gen_posts()
-        self.generator._gen_blog_index_page.assert_called_once()
-        self.generator._write_file.assert_called_once_with(
-            ANY,
-            'blog/test_post'
-        )
-
-    def test_gen_posts_multiple(self):
-        self.generator._write_file = write_file = MagicMock()
-        self.generator._gen_blog_index_page = gen_blog_index_page = MagicMock()
-        self.generator._per_page = 2
-        self.generator._post_files = [TEST_POST, TEST_POST, TEST_POST]
-        self.generator._gen_posts()
-
-        self.assertEqual(gen_blog_index_page.call_count, 2)
-
-        write_file.assert_has_calls([
-            call(ANY, 'blog/test_post'),
-            call(ANY, 'blog/test_post'),
-            call(ANY, 'blog/test_post'),
+        write_feed.assert_has_calls([
+            call('atom', ANY),
+            call('rss', ANY),
         ])
-
-    def test_gen_pages(self):
-        write_file = MagicMock()
-        self.generator._write_file = write_file
-
-        self.generator._gen_pages()
-        write_file.assert_called_once_with(ANY, 'test_page')
-"""
 
 if __name__ == '__main__':
     main()

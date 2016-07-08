@@ -2,7 +2,19 @@
 
 <http://github.com/lrvick/rant>
 
-[![Build Status](https://travis-ci.org/lrvick/rant.svg?branch=master)](https://travis-ci.org/lrvick/rant)  [![Test Coverage](https://codeclimate.com/github/lrvick/rant/badges/coverage.svg)](https://codeclimate.com/github/lrvick/rant/coverage)  [![Code Climate](https://codeclimate.com/github/lrvick/rant/badges/gpa.svg)](https://codeclimate.com/github/lrvick/rant)
+[![TravisCI][travis-badge]][travis-status]
+[![Code Climate][cc-badge]][cc-repo]
+[![Test Coverage][cc-coverage-badge]][cc-coverage]
+[![PyPI version][pypy-badge]][pypy]
+
+[cc-badge]: https://codeclimate.com/github/lrvick/rant/badges/gpa.svg
+[cc-coverage-badge]: https://codeclimate.com/github/lrvick/rant/badges/coverage.svg
+[cc-repo]: https://codeclimate.com/github/lrvick/rant
+[cc-coverage]: https://codeclimate.com/github/lrvick/rant/coverage
+[pypy-badge]: https://badge.fury.io/py/rant.svg
+[pypy]: https://pypi.python.org/pypi/rant
+[travis-badge]: https://travis-ci.org/lrvick/rant.svg?branch=master
+[travis-status]: https://travis-ci.org/lrvick/rant
 
 ## About ##
 

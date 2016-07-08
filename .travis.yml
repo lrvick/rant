@@ -9,6 +9,6 @@ python:
   - "pypy"
   - "pypy3"
 install:
-  - python setup.py install --user
+  - python setup.py install
 script: make test
 

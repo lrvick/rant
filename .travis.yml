@@ -11,3 +11,4 @@ python:
 install:
   - python setup.py install --user
 script: make test
+

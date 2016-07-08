@@ -3,8 +3,8 @@
 <http://github.com/lrvick/rant>
 
 [![TravisCI][travis-badge]][travis-status]
-[![Code Climate][cc-badge]][cc-repo]
 [![Test Coverage][cc-coverage-badge]][cc-coverage]
+[![Code Climate][cc-badge]][cc-repo]
 [![PyPI version][pypy-badge]][pypy]
 
 [cc-badge]: https://codeclimate.com/github/lrvick/rant/badges/gpa.svg

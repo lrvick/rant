@@ -2,6 +2,8 @@
 
 <http://github.com/lrvick/rant>
 
+[![Build Status](https://travis-ci.org/lrvick/rant.svg?branch=master)](https://travis-ci.org/lrvick/rant)  [![Test Coverage](https://codeclimate.com/github/lrvick/rant/badges/coverage.svg)](https://codeclimate.com/github/lrvick/rant/coverage)  [![Code Climate](https://codeclimate.com/github/lrvick/rant/badges/gpa.svg)](https://codeclimate.com/github/lrvick/rant)
+
 ## About ##
 
 "Rant" is a CLI driven blog-aware website generator written in python. It is

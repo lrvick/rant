@@ -11,4 +11,6 @@ python:
 install:
   - python setup.py install
 script: make test
-
+addons:
+    code_climate:
+        repo_token: d209928b49def8bccce9d09f190f1caf4374c0aee5b30782d9cf4cda13c3c96a

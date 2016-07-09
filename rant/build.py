@@ -9,7 +9,7 @@ from fnmatch import fnmatch
 from jinja2 import Environment, FileSystemLoader
 
 
-class Generator(object):
+class Builder(object):
     """Generate web-ready static files from templates/data/config"""
 
     def __init__(self, source_dir='.', dest_dir='./deploy'):
@@ -165,7 +165,7 @@ class Generator(object):
         )
         self._write_file(rendered_feed, '', 'sitemap.xml')
 
-    def generate(self):
+    def build(self):
         start_time = time.time()
 
         print("\nGenerating Pages...")

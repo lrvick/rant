@@ -127,8 +127,7 @@ class TestGenerate(TestCase):
 
     def test_gen_blog_index_page_multiple(self):
         self.builder._per_page = 2
-        write_file = MagicMock()
-        self.builder._write_file = write_file
+        self.builder._write_file = write_file = MagicMock()
         self.builder._write_blog_index_page(PAGE_POSTS, 2)
         write_file.assert_called_once_with(ANY, 'blog/pages/2')
 
@@ -182,11 +181,13 @@ class TestGenerate(TestCase):
         self.builder._write_contexts = write_contexts = MagicMock()
         self.builder._write_blog_index = write_blog_index = MagicMock()
         self.builder._write_feed = write_feed = MagicMock()
+        self.builder._write_sitemap = write_sitemap = MagicMock()
 
         self.builder.build()
         self.assertEqual(gen_contexts.call_count, 2)
         self.assertEqual(write_contexts.call_count, 2)
         write_blog_index.assert_called_once()
+        write_sitemap.assert_called_once()
         write_feed.assert_has_calls([
             call('atom', ANY),
             call('rss', ANY),

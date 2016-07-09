@@ -33,9 +33,9 @@ setup(
         'mock',
     ],
     install_requires=[
-        'setuptools == 20.10.1',
-        'Jinja2 == 2.8',
-        'Markdown == 2.6.6',
-        'PyYAML == 3.11'
+        'setuptools',
+        'Jinja2',
+        'Markdown',
+        'PyYAML'
     ]
 )

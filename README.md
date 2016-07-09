@@ -10,30 +10,20 @@
 [![Dependencies][dependencies-badge]][dependencies]
 [![License][license-badge]][license]
 
-[cc-badge]: https://codeclimate.com/github/lrvick/rant/badges/gpa.svg
-[cc-coverage-badge]: https://codeclimate.com/github/lrvick/rant/badges/coverage.svg
-[cc-repo]: https://codeclimate.com/github/lrvick/rant
-[cc-coverage]: https://codeclimate.com/github/lrvick/rant/coverage
-[pypy-badge]: https://badge.fury.io/py/rant.svg
-[pypy]: https://pypi.python.org/pypi/rant
-[travis-badge]: https://travis-ci.org/lrvick/rant.svg?branch=master
-[travis-status]: https://travis-ci.org/lrvick/rant
-[license-badge]: https://img.shields.io/github/license/lrvick/rant.svg?maxAge=2592000
-[license]: https://github.com/lrvick/rant/blob/master/LICENSE.md
-[wheel-badge]: https://img.shields.io/pypi/format/rant.svg
-[wheel]: https://pypi.python.org/pypi/rant
-[dependencies-badge]: https://www.versioneye.com/user/projects/5780ca085bb139003969dcf8/badge.svg?style=flat-square
-[dependencies]: https://www.versioneye.com/user/projects/5780ca085bb139003969dcf8
-
 ## About ##
 
 "Rant" is a CLI driven blog-aware website generator written in python. It is
-intended to make maintaining a blog or personal website easy using only your
-favorite CLI editor such as vim, and a few simple commands.
+intended to make maintaining a blog or personal website easy as modifying text
+files in your favorite editor.
 
-Insipired by great projects such as: [Jekyll](https://github.com/mojombo/jekyll),
-[Pelican](https://github.com/ametaireau/pelican)
-and [Goldbarg](https://github.com/Schnouki/Golbarg)
+Insipired by great projects such as: [Jekyll][1],
+[Pelican][2], [Goldbarg][3], and [piles of others][4]
+
+[1]: https://github.com/mojombo/jekyll
+[2]: https://github.com/ametaireau/pelican
+[3]: https://github.com/Schnouki/Golbarg
+[4]: https://staticsitegenerators.net
+
 
 ## Current Features ##
 
@@ -45,14 +35,6 @@ and [Goldbarg](https://github.com/Schnouki/Golbarg)
   * Pygments syntax hilighting
   * Disqus commenting integration in default templates
   * Other stuff
-
-## Requirements ##
-
-  * Python 2.7+
-  * pip
-  * libyaml
-  * jinja2
-  * pygments
 
 ## Usage / Installation ##
 
@@ -133,3 +115,18 @@ and [Goldbarg](https://github.com/Schnouki/Golbarg)
   [Last.fm](http://last.fm/user/lrvick) |
   [LinkedIn](http://linkedin.com/in/lrvick) |
   [Github](http://github.com/lrvick/)
+
+[cc-badge]: https://codeclimate.com/github/lrvick/rant/badges/gpa.svg
+[cc-coverage-badge]: https://codeclimate.com/github/lrvick/rant/badges/coverage.svg
+[cc-repo]: https://codeclimate.com/github/lrvick/rant
+[cc-coverage]: https://codeclimate.com/github/lrvick/rant/coverage
+[pypy-badge]: https://badge.fury.io/py/rant.svg
+[pypy]: https://pypi.python.org/pypi/rant
+[travis-badge]: https://travis-ci.org/lrvick/rant.svg?branch=master
+[travis-status]: https://travis-ci.org/lrvick/rant
+[license-badge]: https://img.shields.io/github/license/lrvick/rant.svg?maxAge=2592000
+[license]: https://github.com/lrvick/rant/blob/master/LICENSE.md
+[wheel-badge]: https://img.shields.io/pypi/format/rant.svg
+[wheel]: https://pypi.python.org/pypi/rant
+[dependencies-badge]: https://www.versioneye.com/user/projects/5780ca085bb139003969dcf8/badge.svg?style=flat-square
+[dependencies]: https://www.versioneye.com/user/projects/5780ca085bb139003969dcf8

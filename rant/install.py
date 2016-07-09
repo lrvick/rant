@@ -2,7 +2,7 @@ import os
 import shutil
 
 
-class Initializer(object):
+class Installer(object):
     """Initialize default rant source files in given directory"""
 
     def __init__(self, dest_dir):
@@ -27,7 +27,7 @@ class Initializer(object):
             "%s/layouts" % self._dest_dir
         )
 
-    def init(self):
+    def install(self):
         if os.listdir(self._dest_dir) != []:
             print('\nUnable to initialize rant: Directory not empty')
             return False

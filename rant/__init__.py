@@ -1,4 +1,4 @@
-from rant.init import Initializer
+from rant.install import Installer
 from rant.create import Creator
 from rant.build import Builder
 try:
@@ -17,8 +17,8 @@ def main():
     subparsers = parser.add_subparsers(help='sub-command help', dest='parser')
 
     subparsers.add_parser(
-        'init',
-        help='initialize a new rant project in current directory'
+        'install',
+        help='Install a new rant project in current directory'
     )
 
     subparsers.add_parser(
@@ -33,9 +33,9 @@ def main():
 
     args = parser.parse_args()
 
-    if args.parser == 'init':
-        initializer = Initializer('.')
-        initializer.init()
+    if args.parser == 'install':
+        installer = Installer('.')
+        installer.install()
         pass
 
     if args.parser == 'create':

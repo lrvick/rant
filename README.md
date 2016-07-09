@@ -49,19 +49,17 @@ Insipired by great projects such as: [Jekyll][1],
     Create a folder where you intend your site to live and initialize rant.
 
     ```bash
-    mkdir my_rant_blog
-    cd my_rant_blog
-    rant install
+    rant install my_rant_blog
     ```
 
     This will populate the folder with the basic rant project ready to add posts to.
 
 3.  Create a post or page
 
-    To make a first blog post do:
+    To create a page or blog post do:
 
     ```bash
-    rant publish
+    rant new
     ```
 
     This will open your default $EDITOR with a template like the following:
@@ -89,7 +87,7 @@ Insipired by great projects such as: [Jekyll][1],
 
     ```bash
     vim posts/201109230245-My_neat_blog_post.md
-    rant generate
+    rant build
     ```
 
     From here you can also modify any of the media found in /static, or edit

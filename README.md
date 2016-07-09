@@ -21,7 +21,7 @@
 [license-badge]: https://img.shields.io/github/license/lrvick/rant.svg?maxAge=2592000
 [license]: https://github.com/lrvick/rant/blob/master/LICENSE.md
 [wheel-badge]: https://img.shields.io/pypi/format/rant.svg
-[wheel]: https://github.com/lrvick/rant/blob/master/LICENSE.md
+[wheel]: https://pypi.python.org/pypi/rant
 [dependencies-badge]: https://www.versioneye.com/user/projects/5780ca085bb139003969dcf8/badge.svg?style=flat-square
 [dependencies]: https://www.versioneye.com/user/projects/5780ca085bb139003969dcf8
 

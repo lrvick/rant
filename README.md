@@ -6,6 +6,9 @@
 [![Test Coverage][cc-coverage-badge]][cc-coverage]
 [![Code Climate][cc-badge]][cc-repo]
 [![PyPI version][pypy-badge]][pypy]
+[![Wheel][wheel-badge]][wheel]
+[![Dependencies][dependencies-badge]][dependencies]
+[![License][license-badge]][license]
 
 [cc-badge]: https://codeclimate.com/github/lrvick/rant/badges/gpa.svg
 [cc-coverage-badge]: https://codeclimate.com/github/lrvick/rant/badges/coverage.svg
@@ -15,6 +18,12 @@
 [pypy]: https://pypi.python.org/pypi/rant
 [travis-badge]: https://travis-ci.org/lrvick/rant.svg?branch=master
 [travis-status]: https://travis-ci.org/lrvick/rant
+[license-badge]: https://img.shields.io/github/license/lrvick/rant.svg?maxAge=2592000
+[license]: https://github.com/lrvick/rant/blob/master/LICENSE.md
+[wheel-badge]: https://img.shields.io/pypi/format/rant.svg
+[wheel]: https://github.com/lrvick/rant/blob/master/LICENSE.md
+[dependencies-badge]: https://www.versioneye.com/user/projects/5780ca085bb139003969dcf8/badge.svg?style=flat-square
+[dependencies]: https://www.versioneye.com/user/projects/5780ca085bb139003969dcf8
 
 ## About ##
 

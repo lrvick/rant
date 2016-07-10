@@ -15,7 +15,6 @@ help:
 
 clean: clean-build clean-pyc clean-test
 
-
 clean-build:
 	rm -fr build/
 	rm -fr dist/
@@ -33,7 +32,6 @@ clean-test:
 	rm -fr .tox/
 	rm -f .coverage
 	rm -fr htmlcov/
-
 
 lint:
 	flake8 rant tests
@@ -58,4 +56,4 @@ dist: clean
 	ls -l dist
 
 install: clean
-	python setup.py install
+	python setup.py install --user

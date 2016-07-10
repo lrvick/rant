@@ -49,4 +49,4 @@ def process_args(args):
 def main():
     parser = create_parser()
     args = parser.parse_args()
-    process_args(args.parser)
+    process_args(args)

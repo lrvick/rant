@@ -1,52 +1,55 @@
-import os
-import tempfile
-import shutil
-import datetime
+from os import environ, system
+from os.path import dirname, join, abspath
+from shutil import copyfile
+from tempfile import NamedTemporaryFile
+from datetime import datetime
 from time import gmtime, strftime
 
 
 class Creator(object):
     """Create new page or post"""
 
-    def __init__(self, layout='post'):
+    def __init__(self, dest_dir, layout='post'):
+        self._dest_dir = dest_dir
         self._layout = layout
-        self._rant_path = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), "..")
-        )
+        self._rant_path = abspath(join(dirname(__file__), ".."))
+        self._time = gmtime()
 
-    def create(self):
-        template = '%s/defaults/layouts/publish.md' % self._rant_path
-        local_template = '%s/layouts/publish.md' % os.getcwd()
-        if os.path.isfile(local_template):
-            template = local_template
-        template_fh = open(template, 'r')
-        temp_fh = tempfile.NamedTemporaryFile(delete=False)
-        line = template_fh.readline()
-        date_format = '%Y-%m-%d %H:%M:%S'
-        timestamp = strftime(date_format, gmtime())
-        while line:
-            temp_fh.write(bytes(line, 'UTF-8'))
-            line = template_fh.readline()
-            if 'date' in line:
-                line = "date: %s\n" % timestamp
-        temp_fh.close()
-        os.system('%s %s' % (os.environ.get('EDITOR', 'vim'), temp_fh.name))
-        temp_fh = open(temp_fh.name, 'r')
-        line = temp_fh.readline()
-        while line:
-            if 'date' in line:
-                date = line.split(': ')[1].strip('\n ')
-            if 'title' in line:
-                title = line.split(':')[1].strip('\n ')
-            if 'layout' in line:
-                layout = line.split(':')[1].strip('\n ')
-            line = temp_fh.readline()
-        if layout == 'post':
-            datetime_obj = datetime.datetime.strptime(date, date_format)
-            timestamp = datetime_obj.strftime("%Y-%m-%d-%H%M")
+    def _render_template(self):
+        template_vars = [
+            'layout: %s' % self._layout,
+            'title: \'\'',
+            'date: %s' % strftime('%Y-%m-%d %H:%M:%S', self._time),
+        ]
+        if self._layout == 'post':
+            template_vars.append('tags: []')
+            template_vars.append('comments: true')
+            template_vars.append('draft: false')
+        template = "---\n%s\n---\n" % "\n".join(template_vars)
+        return template
+
+    def _get_savepath(self, title):
+        if self._layout == 'post':
+            timestamp = datetime(*self._time[:6]).strftime("%Y-%m-%d-%H%M")
             filename = '%s-%s.md' % (timestamp, title.replace(' ', '_'))
         else:
             filename = '%s.md' % (title.replace(' ', '_'))
-        filepath = '%s/%ss/%s' % (os.getcwd(), layout, filename)
-        shutil.copyfile(temp_fh.name, filepath)
-        print("Saved to: %s" % filepath)
+        filepath = '%s/%ss/%s' % (self._dest_dir, self._layout, filename)
+        return filepath
+
+    def _get_temppath(self, content):
+        fh = NamedTemporaryFile(delete=False)
+        fh.write(bytes(content, 'UTF-8'))
+        fh.close()
+        return fh.name
+
+    def _launch_editor(self, filepath):
+        system('%s %s' % (environ.get('EDITOR', 'vim'), filepath))
+
+    def create(self):
+        rendered_template = self._render_template()
+        tempfile_path = self._get_temppath(rendered_template)
+        self._launch_editor(tempfile_path)
+        outfile_path = self._get_savepath(tempfile_path)
+        copyfile(tempfile_path, outfile_path)
+        print("Saved to: %s" % outfile_path)

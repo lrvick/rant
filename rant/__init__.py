@@ -1,13 +1,10 @@
 from rant.install import Installer
 from rant.create import Creator
 from rant.build import Builder
-try:
-    from argparse import ArgumentParser
-except ImportError:
-    raise
+from argparse import ArgumentParser
 
 
-def main():
+def create_parser():
 
     parser = ArgumentParser(description="""
         Tool to interface with rant. Provides methods to create and edit pages
@@ -31,19 +28,25 @@ def main():
         help='Build static site from your source templates and content'
     )
 
-    args = parser.parse_args()
+    return parser
+
+
+def process_args(args):
 
     if args.parser == 'install':
-        installer = Installer('.')
-        installer.install()
+        Installer('.').install()
         pass
 
     if args.parser == 'create':
-        creator = Creator('.')
-        creator.create()
+        Creator('.').create()
         pass
 
     if args.parser == 'build':
-        builder = Builder('.', 'deploy')
-        builder.build()
+        Builder('.', 'deploy').build()
         pass
+
+
+def main():
+    parser = create_parser()
+    args = parser.parse_args()
+    process_args(args.parser)

@@ -36,6 +36,7 @@ setup(
         'setuptools',
         'Jinja2',
         'Markdown',
-        'PyYAML'
+        'PyYAML',
+        'future'
     ]
 )

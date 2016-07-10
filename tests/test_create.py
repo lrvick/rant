@@ -63,7 +63,7 @@ class TestCreator(TestCase):
             temppath = self.creator._get_temppath(RENDERED_POST)
             self.assertEqual(temppath, 'somefile')
             mock_ntf.write.assert_called_once_with(
-                bytes(RENDERED_POST, "UTF8")
+                RENDERED_POST.encode("UTF-8")
             )
 
     def test_launch_editor(self):

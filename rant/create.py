@@ -39,7 +39,7 @@ class Creator(object):
 
     def _get_temppath(self, content):
         fh = NamedTemporaryFile(delete=False)
-        fh.write(bytes(content, 'UTF-8'))
+        fh.write(content.encode('UTF-8'))
         fh.close()
         return fh.name
 

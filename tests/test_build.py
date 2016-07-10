@@ -86,7 +86,7 @@ class TestGenerate(TestCase):
         )
 
     def test_write_file(self):
-        with patch("builtins.open", mock_open(), create=True) as fake_fh:
+        with patch("rant.build.open", mock_open()) as fake_fh:
             with patch("rant.build.os", MagicMock()) as mock_os:
 
                 mock_os.path = MagicMock()
@@ -96,7 +96,7 @@ class TestGenerate(TestCase):
 
                 fake_fh.assert_called_once_with(POST_FILENAME, 'wb', 1)
                 fake_fh.return_value.write.assert_called_once_with(
-                    b'<p>Test</p>'
+                    '<p>Test</p>'
                 )
                 mock_os.path.isdir.assert_called_with(
                     'tests/test_site/deploy/blog/test_post'

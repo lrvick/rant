@@ -1,10 +1,10 @@
+from io import open
 import os
 import yaml
 import markdown
 import re
 import time
 from datetime import datetime
-import codecs
 from fnmatch import fnmatch
 from jinja2 import Environment, FileSystemLoader
 
@@ -15,7 +15,10 @@ class Builder(object):
     def __init__(self, source_dir='.', dest_dir='./deploy'):
         self._source_dir = source_dir
         self._dest_dir = dest_dir
-        self.config = yaml.load(open('%s/config.yml' % source_dir))
+
+        with open('%s/config.yml' % source_dir, 'r') as fh:
+            self.config = yaml.load(fh)
+            fh.close()
 
         self._page_files = self._find_source_files('page')
         self._post_files = self._find_source_files('post')
@@ -48,7 +51,7 @@ class Builder(object):
         headers_text = ''
         content_text = ''
         headers_done = None
-        content_fh = codecs.open(filename, 'r', 'utf-8')
+        content_fh = open(filename, 'r')
         line = content_fh.readline()
         while line:
             line = content_fh.readline()
@@ -92,8 +95,9 @@ class Builder(object):
         if not os.path.isdir(save_folder):
             os.makedirs(save_folder)
         filepath = "%s/%s" % (save_folder, filename)
-        save_fh = codecs.open(filepath, 'w', 'utf-8')
-        save_fh.write(content)
+        with open(filepath, 'wb', 1) as save_fh:
+            save_fh.write(content)
+            save_fh.close()
         print("-> '%s'" % filepath)
 
     def _gen_contexts(self, filenames):

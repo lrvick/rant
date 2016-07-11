@@ -69,16 +69,6 @@ class TestGenerate(TestCase):
             self.builder._get_navigation()
         )
 
-    def test_parse_file(self):
-        self.assertEqual(
-            TEST_POST_PARSED,
-            self.builder._parse_file(TEST_POST)
-        )
-        self.assertEqual(
-            None,
-            self.builder._parse_file(TEST_POST_DRAFT)
-        )
-
     def test_render_html(self):
         self.assertEqual(
             open(POST_FILENAME, 'r').read(),
@@ -140,9 +130,9 @@ class TestGenerate(TestCase):
         )
 
     def test_gen_contexts_draft(self):
-        self.builder._parse_file = MagicMock(return_value=None)
+        self.builder.Parser = MagicMock(return_value=None)
         self.assertEqual(
-            self.builder._gen_contexts([TEST_POST]),
+            self.builder._gen_contexts([TEST_POST_DRAFT]),
             []
         )
 

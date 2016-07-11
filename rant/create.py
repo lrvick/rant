@@ -4,6 +4,7 @@ from shutil import copyfile
 from tempfile import NamedTemporaryFile
 from datetime import datetime
 from time import gmtime, strftime
+from rant.parse import Parser
 
 
 class Creator(object):
@@ -50,6 +51,7 @@ class Creator(object):
         rendered_template = self._render_template()
         tempfile_path = self._get_temppath(rendered_template)
         self._launch_editor(tempfile_path)
-        outfile_path = self._get_savepath(tempfile_path)
+        parsed_tempfile = Parser(tempfile_path).parse()
+        outfile_path = self._get_savepath(parsed_tempfile['title'])
         copyfile(tempfile_path, outfile_path)
         print("Saved to: %s" % outfile_path)

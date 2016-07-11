@@ -1,12 +1,11 @@
 from io import open
 import os
 import yaml
-import markdown
-import re
 import time
 from datetime import datetime
 from fnmatch import fnmatch
 from jinja2 import Environment, FileSystemLoader
+from rant.parse import Parser
 
 
 class Builder(object):
@@ -47,39 +46,6 @@ class Builder(object):
             navigation.append(nav_item)
         return navigation
 
-    def _parse_file(self, filename):
-        headers_text = ''
-        content_text = ''
-        headers_done = None
-        content_fh = open(filename, 'r')
-        line = content_fh.readline()
-        while line:
-            line = content_fh.readline()
-            if not headers_done:
-                if line != '---\n':
-                    if line:
-                        headers_text = "%s%s" % (headers_text, line)
-                else:
-                    headers_done = True
-            elif line:
-                content_text = "%s%s" % (content_text, line)
-        headers = yaml.load(headers_text)
-        content = markdown.markdown(
-            content_text,
-            ['codehilite(linenums=True)', 'tables']
-        )
-        if headers['draft']:
-            return None
-        permalink = '%s%s' % (
-            'blog/' if headers['layout'] == 'post' else '',
-            re.sub("[^a-zA-Z0-9]+", "_", headers['title']).lower()
-        )
-        content_vars = {
-          'permalink': permalink,
-          'content': content,
-        }
-        return dict(content_vars, **headers)
-
     def _render_html(self, context):
         template = self._env.get_template('%s.html' % context['layout'])
         current_page = context['permalink']
@@ -103,7 +69,7 @@ class Builder(object):
     def _gen_contexts(self, filenames):
         contexts = []
         for filename in filenames:
-            context = self._parse_file(filename)
+            context = Parser(filename).parse()
             if context is None:
                 break
             context['rendered_html'] = self._render_html(context)

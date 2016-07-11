@@ -58,10 +58,10 @@ class TestCreator(TestCase):
 
     def test_get_temppath(self):
         with patch("rant.create.NamedTemporaryFile", MagicMock) as mock_ntf:
-            mock_ntf.name = 'somefile'
+            mock_ntf.name = '/tmp/sometemp'
             mock_ntf.write = MagicMock()
             temppath = self.creator._get_temppath(RENDERED_POST)
-            self.assertEqual(temppath, 'somefile')
+            self.assertEqual(temppath, '/tmp/sometemp')
             mock_ntf.write.assert_called_once_with(
                 RENDERED_POST.encode("UTF-8")
             )
@@ -74,21 +74,26 @@ class TestCreator(TestCase):
                 mock_system.assert_called_once_with('nano somefile')
 
     def test_create(self):
-        with patch("rant.create.copyfile", MagicMock()) as mock_copyfile:
-            self.creator._render_template = render_template = MagicMock()
-            self.creator._get_temppath = get_temppath = MagicMock()
-            self.creator._launch_editor = launch_editor = MagicMock()
-            self.creator._get_savepath = get_savepath = MagicMock()
-            get_temppath.return_value = 'tempfile'
-            get_savepath.return_value = 'savefile'
-            render_template.return_value = RENDERED_POST
+        with patch("rant.create.Parser", MagicMock) as mock_parser:
+            with patch("rant.create.copyfile", MagicMock()) as mock_copyfile:
+                self.creator._render_template = render_template = MagicMock()
+                self.creator._get_temppath = get_temppath = MagicMock()
+                self.creator._launch_editor = launch_editor = MagicMock()
+                self.creator._get_savepath = get_savepath = MagicMock()
+                mock_parser.parse = parse = MagicMock(
+                    return_value={'title': 'sometitle'}
+                )
+                get_temppath.return_value = 'tempfile'
+                get_savepath.return_value = 'savefile'
+                render_template.return_value = RENDERED_POST
 
-            self.creator.create()
-            render_template.assert_called_once()
-            get_temppath.assert_called_once_with(RENDERED_POST)
-            launch_editor.assert_called_once_with('tempfile')
-            get_savepath.assert_called_once_with('tempfile')
-            mock_copyfile.assert_called_once_with('tempfile', 'savefile')
+                self.creator.create()
+                render_template.assert_called_once()
+                get_temppath.assert_called_once_with(RENDERED_POST)
+                launch_editor.assert_called_once_with('tempfile')
+                parse.assert_called_once()
+                get_savepath.assert_called_once_with('sometitle')
+                mock_copyfile.assert_called_once_with('tempfile', 'savefile')
 
 if __name__ == '__main__':
     main()

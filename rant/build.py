@@ -6,7 +6,7 @@ from datetime import datetime
 from fnmatch import fnmatch
 from jinja2 import Environment, FileSystemLoader
 from rant.parse import Parser
-from shutil import copytree
+from distutils.dir_util import copy_tree
 
 
 class Builder(object):
@@ -137,7 +137,7 @@ class Builder(object):
         self._write_file(rendered_feed, '', 'sitemap.xml')
 
     def _copy_static(self):
-        copytree("%s/static" % self._source_dir, self._dest_dir)
+        copy_tree("%s/static" % self._source_dir, self._dest_dir)
 
     def build(self):
         start_time = time.time()

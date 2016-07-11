@@ -166,9 +166,9 @@ class TestGenerate(TestCase):
         write_file.assert_called_once_with(ANY, '', 'sitemap.xml')
 
     def test_copy_static(self):
-        with patch("rant.build.copytree", MagicMock()) as copytree:
+        with patch("rant.build.copy_tree", MagicMock()) as copy_tree:
             self.builder._copy_static()
-            copytree.assert_called_once_with(
+            copy_tree.assert_called_once_with(
                 '%s/static' % SOURCE_DIR,
                 DEST_DIR
             )

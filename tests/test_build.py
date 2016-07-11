@@ -165,6 +165,14 @@ class TestGenerate(TestCase):
         self.builder._write_sitemap([post, post, post], [page, page, page])
         write_file.assert_called_once_with(ANY, '', 'sitemap.xml')
 
+    def test_copy_static(self):
+        with patch("rant.build.copytree", MagicMock()) as copytree:
+            self.builder._copy_static()
+            copytree.assert_called_once_with(
+                '%s/static' % SOURCE_DIR,
+                DEST_DIR
+            )
+
     def test_build(self):
         self.builder._write_contexts = write_contexts = MagicMock()
         self.builder._gen_contexts = gen_contexts = MagicMock()
@@ -172,12 +180,14 @@ class TestGenerate(TestCase):
         self.builder._write_blog_index = write_blog_index = MagicMock()
         self.builder._write_feed = write_feed = MagicMock()
         self.builder._write_sitemap = write_sitemap = MagicMock()
+        self.builder._copy_static = copy_static = MagicMock()
 
         self.builder.build()
         self.assertEqual(gen_contexts.call_count, 2)
         self.assertEqual(write_contexts.call_count, 2)
         write_blog_index.assert_called_once()
         write_sitemap.assert_called_once()
+        copy_static.assert_called_once()
         write_feed.assert_has_calls([
             call('atom', ANY),
             call('rss', ANY),

@@ -6,6 +6,7 @@ Version 0.5
 - Overhaul code to be be easier to test
 - 100% test coverage
 - Some CLI commands renamed (See docs)
+- Added python 2.7 support
 
 Version 0.2.3
 -------------

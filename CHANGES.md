@@ -6,7 +6,7 @@ Version 0.5
 - Overhaul code to be be easier to test
 - 100% test coverage
 - Some CLI commands renamed (See docs)
-- Added python 2.7 support
+- Added pypy2/3 and python 2.7 support
 - Hashed dependencies now included for pip 8.1.2+
 
 Version 0.2.3

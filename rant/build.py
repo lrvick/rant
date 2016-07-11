@@ -61,7 +61,7 @@ class Builder(object):
         if not os.path.isdir(save_folder):
             os.makedirs(save_folder)
         filepath = "%s/%s" % (save_folder, filename)
-        with open(filepath, 'wb', 1) as save_fh:
+        with open(filepath, 'w', 1) as save_fh:
             save_fh.write(content)
             save_fh.close()
         print("-> '%s'" % filepath)

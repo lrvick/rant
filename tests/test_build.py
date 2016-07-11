@@ -84,7 +84,7 @@ class TestGenerate(TestCase):
                 mock_os.makedirs = MagicMock()
                 self.builder._write_file('<p>Test</p>', 'blog/test_post')
 
-                fake_fh.assert_called_once_with(POST_FILENAME, 'wb', 1)
+                fake_fh.assert_called_once_with(POST_FILENAME, 'w', 1)
                 fake_fh.return_value.write.assert_called_once_with(
                     '<p>Test</p>'
                 )

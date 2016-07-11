@@ -1,6 +1,7 @@
-import markdown
+from markdown import markdown
 import yaml
 import re
+from io import open
 
 
 class Parser(object):
@@ -8,36 +9,25 @@ class Parser(object):
     def __init__(self, filename):
         self._filename = filename
 
+    def _get_file_parts(self):
+        content = open(self._filename, 'r').read().split('---')
+        headers = yaml.load(content[1])
+        body = content[2]
+        return [headers, body]
+
+    def _get_permalink(self, headers):
+        prefix = 'blog/' if headers['layout'] == 'post' else ''
+        title = headers['title'].lower()
+        permalink = '%s%s' % (prefix, re.sub("[^a-zA-Z0-9]+", "_", title))
+        return permalink
+
     def parse(self):
-        headers_text = ''
-        content_text = ''
-        headers_done = None
-        content_fh = open(self._filename, 'r')
-        line = content_fh.readline()
-        while line:
-            line = content_fh.readline()
-            if not headers_done:
-                if line != '---\n':
-                    if line:
-                        headers_text = "%s%s" % (headers_text, line)
-                else:
-                    headers_done = True
-            elif line:
-                content_text = "%s%s" % (content_text, line)
-        headers = yaml.load(headers_text)
-        content = markdown.markdown(
-            content_text,
+        values, body = self._get_file_parts()
+        if 'draft' in values and values['draft'] is True:
+            return None
+        values['content'] = markdown(
+            body,
             ['codehilite(linenums=True)', 'tables']
         )
-        if 'draft' in headers and headers['draft'] is True:
-            return None
-        permalink = '%s%s' % (
-            'blog/' if headers['layout'] == 'post' else '',
-            re.sub("[^a-zA-Z0-9]+", "_", headers['title']).lower()
-        )
-        content_vars = {
-          'permalink': permalink,
-          'content': content,
-        }
-
-        return dict(content_vars, **headers)
+        values['permalink'] = self._get_permalink(values)
+        return values

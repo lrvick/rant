@@ -8,6 +8,7 @@ Version 0.5
 - Some CLI commands renamed (See docs)
 - Added pypy2/3 and python 2.7 support
 - Hashed dependencies now included for pip 8.1.2+
+- Include a livereload development server: `rant serve`
 
 Version 0.2.3
 -------------

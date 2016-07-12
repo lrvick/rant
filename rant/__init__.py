@@ -1,6 +1,7 @@
 from rant.install import Installer
 from rant.create import Creator
 from rant.build import Builder
+from rant.serve import Server
 from argparse import ArgumentParser
 
 
@@ -28,6 +29,11 @@ def create_parser():
         help='Build static site from your source templates and content'
     )
 
+    subparsers.add_parser(
+        'serve',
+        help='Start server that auto-builds on file-change for development'
+    )
+
     return parser
 
 
@@ -43,6 +49,10 @@ def process_args(args):
 
     if args.parser == 'build':
         Builder('.', 'deploy').build()
+        pass
+
+    if args.parser == 'serve':
+        Server('.', 'deploy').serve()
         pass
 
 

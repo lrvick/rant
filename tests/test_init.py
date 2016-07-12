@@ -30,6 +30,13 @@ class TestCLIParser(TestCase):
             process_args(args)
             builder.build.assert_called_once()
 
+    def test_serve(self):
+        with patch("rant.__init__.Server", MagicMock) as server:
+            server.serve = MagicMock()
+            args = self.parser.parse_args(['serve'])
+            process_args(args)
+            server.serve.assert_called_once()
+
     def test_main(self):
         with patch("rant.__init__.create_parser", MagicMock()) \
                 as create_parser:

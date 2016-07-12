@@ -40,8 +40,14 @@ Insipired by great projects such as: [Jekyll][1],
 
 1. Install rant
 
+    Stable:
     ```bash
-    pip install rant
+    pip install --user rant
+    ```
+
+    Development:
+    ```bash
+    pip install --user --upgrade -e git+https://github.com/lrvick/rant/#egg=rant
     ```
 
 2. Start a new rant project
@@ -59,7 +65,7 @@ Insipired by great projects such as: [Jekyll][1],
     To create a page or blog post do:
 
     ```bash
-    rant new
+    rant create
     ```
 
     This will open your default $EDITOR with a template like the following:
@@ -95,6 +101,20 @@ Insipired by great projects such as: [Jekyll][1],
     to your liking.
 
     Happy ranting :-)
+
+4. Preview your work 
+
+    A development web server is included that will run `rant build` for you
+    whenever you make changes to your source directory, then reload your
+    browser.
+
+    Start it with:
+
+    ```bash
+    rant serve
+    ```
+
+     The server will be reachable at http://localhost:8080 by default.
 
 ## Notes ##
 

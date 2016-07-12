@@ -37,6 +37,7 @@ setup(
         'Jinja2',
         'Markdown',
         'PyYAML',
-        'future'
+        'future',
+        'livereload'
     ]
 )

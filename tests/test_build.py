@@ -34,8 +34,6 @@ TEST_POST_PRERENDER = {
     'navigation': ['blog', 'test page'],
     'config': TEST_CONFIG,
 }
-
-
 PAGE_FILES = [TEST_PAGE]
 POST_FILES = [TEST_POST, TEST_POST_DRAFT]
 POST_FILENAME = 'tests/test_site/deploy/blog/test_post/index.html'
@@ -46,12 +44,33 @@ PAGE_POSTS = [
     TEST_POST_PARSED.copy(),
     TEST_POST_PARSED.copy(),
 ]
-
+POST_FILE_LIST_UNSORTED=[
+    '2014-07-11-2320-test_post1.md',
+    '2012-10-09-1105-test_post.md',
+    '2016-01-28-0800-test_post3.md',
+    '2015-09-07-2002-test_post2.md',
+    '2014-03-20-2110-test_Post.md',
+    '2013-07-02-2101-Test_post.md',
+]
+POST_FILE_LIST_SORTED=[
+    '%s/posts/2012-10-09-1105-test_post.md' % SOURCE_DIR,
+    '%s/posts/2013-07-02-2101-Test_post.md' % SOURCE_DIR,
+    '%s/posts/2014-03-20-2110-test_Post.md' % SOURCE_DIR,
+    '%s/posts/2014-07-11-2320-test_post1.md' % SOURCE_DIR,
+    '%s/posts/2015-09-07-2002-test_post2.md' % SOURCE_DIR,
+    '%s/posts/2016-01-28-0800-test_post3.md' % SOURCE_DIR,
+]
 
 class TestGenerate(TestCase):
     def setUp(self):
         self.maxDiff = None
         self.builder = Builder(SOURCE_DIR, DEST_DIR)
+
+    def test_get_filename_timestamp(self):
+        self.assertEqual(
+            self.builder._get_filename_timestamp(TEST_POST),
+            datetime.datetime(2016, 7, 2, 21, 1)
+        )
 
     def test_find_source_files(self):
         self.assertEqual(
@@ -62,6 +81,14 @@ class TestGenerate(TestCase):
             PAGE_FILES,
             self.builder._find_source_files('page')
         )
+
+    def test_find_source_files_order(self):
+        self.builder = Builder(SOURCE_DIR, DEST_DIR)
+        with patch("os.listdir", return_value=POST_FILE_LIST_UNSORTED):
+            self.assertEqual(
+                POST_FILE_LIST_SORTED,
+                self.builder._find_source_files('post')
+            )
 
     def test_get_navigation(self):
         self.assertEqual(

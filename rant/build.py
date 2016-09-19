@@ -1,5 +1,6 @@
 from io import open
 import os
+import re
 import yaml
 import time
 from datetime import datetime
@@ -28,10 +29,18 @@ class Builder(object):
             loader=FileSystemLoader('%s/layouts/' % self._source_dir)
         )
 
+    def _get_filename_timestamp(self, filename):
+        try:
+            regex = re.compile("(\d{4}-\d{2}-\d{2}-\d{4})-[A-Za-z0-9-_]+\.md$")
+            match = regex.search(filename)
+            return datetime.strptime(match.groups()[0], "%Y-%m-%d-%H%M")
+        except:
+            return filename
+
     def _find_source_files(self, layout):
         source_files = []
         file_names = os.listdir('%s/%ss' % (self._source_dir, layout))
-        for file_name in file_names:
+        for file_name in sorted(file_names, key=self._get_filename_timestamp):
             if fnmatch(file_name, '*.md'):
                 full_filename = '%s/%ss/%s' % (self._source_dir,
                                                layout,

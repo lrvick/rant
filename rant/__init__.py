@@ -51,7 +51,6 @@ def create_parser():
 def process_args(master_parser):
 
     parser = master_parser.parser
-    print parser
     if parser == 'install':
         Installer('.').install()
         pass

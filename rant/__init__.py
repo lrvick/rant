@@ -1,8 +1,19 @@
+import sys
+import logging
+from argparse import ArgumentParser
 from rant.install import Installer
 from rant.create import Creator
 from rant.build import Builder
 from rant.serve import Server
-from argparse import ArgumentParser
+
+root = logging.getLogger()
+root.setLevel(logging.INFO)
+
+ch = logging.StreamHandler(sys.stdout)
+ch.setLevel(logging.INFO)
+formatter = logging.Formatter('%(message)s')
+ch.setFormatter(formatter)
+root.addHandler(ch)
 
 
 def create_parser():

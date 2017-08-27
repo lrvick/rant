@@ -44,33 +44,11 @@ PAGE_POSTS = [
     TEST_POST_PARSED.copy(),
     TEST_POST_PARSED.copy(),
 ]
-POST_FILE_LIST_UNSORTED=[
-    '2014-07-11-2320-test_post1.md',
-    '2012-10-09-1105-test_post.md',
-    '2016-01-28-0800-test_post3.md',
-    '2015-09-07-2002-test_post2.md',
-    '2014-03-20-2110-test_Post.md',
-    '2013-07-02-2101-Test_post.md',
-]
-POST_FILE_LIST_SORTED=[
-    '%s/posts/2012-10-09-1105-test_post.md' % SOURCE_DIR,
-    '%s/posts/2013-07-02-2101-Test_post.md' % SOURCE_DIR,
-    '%s/posts/2014-03-20-2110-test_Post.md' % SOURCE_DIR,
-    '%s/posts/2014-07-11-2320-test_post1.md' % SOURCE_DIR,
-    '%s/posts/2015-09-07-2002-test_post2.md' % SOURCE_DIR,
-    '%s/posts/2016-01-28-0800-test_post3.md' % SOURCE_DIR,
-]
 
 class TestGenerate(TestCase):
     def setUp(self):
         self.maxDiff = None
         self.builder = Builder(SOURCE_DIR, DEST_DIR)
-
-    def test_get_filename_timestamp(self):
-        self.assertEqual(
-            self.builder._get_filename_timestamp(TEST_POST),
-            datetime.datetime(2016, 7, 2, 21, 1)
-        )
 
     def test_find_source_files(self):
         self.assertEqual(
@@ -82,14 +60,6 @@ class TestGenerate(TestCase):
             self.builder._find_source_files('page')
         )
 
-    def test_find_source_files_order(self):
-        self.builder = Builder(SOURCE_DIR, DEST_DIR)
-        with patch("os.listdir", return_value=POST_FILE_LIST_UNSORTED):
-            self.assertEqual(
-                POST_FILE_LIST_SORTED,
-                self.builder._find_source_files('post')
-            )
-
     def test_get_navigation(self):
         self.assertEqual(
             NAVIGATION,
@@ -97,10 +67,12 @@ class TestGenerate(TestCase):
         )
 
     def test_render_html(self):
+        fh = open(POST_FILENAME, 'r')
         self.assertEqual(
-            open(POST_FILENAME, 'r').read(),
+            fh.read(),
             self.builder._render_html(TEST_POST_PARSED.copy())
         )
+        fh.close()
 
     def test_write_file(self):
         with patch("rant.build.open", mock_open()) as fake_fh:
@@ -112,7 +84,7 @@ class TestGenerate(TestCase):
                 self.builder._write_file('<p>Test</p>', 'blog/test_post')
 
                 fake_fh.assert_called_once_with(POST_FILENAME, 'w', 1)
-                fake_fh.return_value.write.assert_called_once_with(
+                fake_fh.return_value.write.assert_called_with(
                     '<p>Test</p>'
                 )
                 mock_os.path.isdir.assert_called_with(
@@ -123,13 +95,15 @@ class TestGenerate(TestCase):
                 )
 
     def test_render_blog_index_page(self):
+        fh = open(POST_INDEX_FILENAME, 'r')
         self.assertEqual(
-            open(POST_INDEX_FILENAME, 'r').read(),
+            fh.read(),
             self.builder._render_blog_index_page(
                 [TEST_POST_PARSED.copy()],
                 1
             )
         )
+        fh.close()
 
     def test_write_blog_index_page_single(self):
         self.builder._per_page = 1

@@ -1,3 +1,4 @@
+import logging
 from os import environ, system
 from os.path import dirname, join, abspath
 from shutil import copyfile
@@ -54,4 +55,4 @@ class Creator(object):
         parsed_tempfile = Parser(tempfile_path).parse()
         outfile_path = self._get_savepath(parsed_tempfile['title'])
         copyfile(tempfile_path, outfile_path)
-        print("Saved to: %s" % outfile_path)
+        logging.info("Saved to: %s" % outfile_path)

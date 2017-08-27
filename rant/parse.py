@@ -10,7 +10,9 @@ class Parser(object):
         self._filename = filename
 
     def _get_file_parts(self):
-        content = open(self._filename, 'r').read().split('---')
+        fh = open(self._filename, 'r')
+        content = fh.read().split('---')
+        fh.close()
         headers = yaml.load(content[1])
         body = content[2]
         return [headers, body]
@@ -27,7 +29,15 @@ class Parser(object):
             return None
         values['content'] = markdown(
             body,
-            ['codehilite(linenums=True)', 'tables']
+            extensions=[
+                'markdown.extensions.codehilite',
+                'markdown.extensions.tables'
+            ],
+            extension_configs={
+                "codehilite":{
+                    "linenums": True
+                }
+            }
         )
         values['permalink'] = self._get_permalink(values)
         return values

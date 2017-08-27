@@ -1,3 +1,4 @@
+import logging
 from os import makedirs, listdir
 from os.path import abspath, dirname, join
 from shutil import copy, copytree
@@ -30,9 +31,9 @@ class Installer(object):
 
     def install(self):
         if listdir(self._dest_dir) != []:
-            print('\nUnable to initialize rant: Directory not empty')
+            logging.info('\nUnable to initialize rant: Directory not empty')
             return False
         self._create_tree()
         self._copy_defaults()
-        print('\nInitialized rant in "%s"' % self._dest_dir)
-        print('\nYou may now edit "%s/config.yml" as needed.' % self._dest_dir)
+        logging.info('\nInitialized rant in "%s"' % self._dest_dir)
+        logging.info('\nYou may now edit "%s/config.yml" as needed.' % self._dest_dir)

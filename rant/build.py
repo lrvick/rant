@@ -3,6 +3,7 @@ import os
 import re
 import yaml
 import time
+import logging
 from datetime import datetime
 from fnmatch import fnmatch
 from jinja2 import Environment, FileSystemLoader
@@ -29,18 +30,10 @@ class Builder(object):
             loader=FileSystemLoader('%s/layouts/' % self._source_dir)
         )
 
-    def _get_filename_timestamp(self, filename):
-        try:
-            regex = re.compile("(\d{4}-\d{2}-\d{2}-\d{4})-[A-Za-z0-9-_]+\.md$")
-            match = regex.search(filename)
-            return datetime.strptime(match.groups()[0], "%Y-%m-%d-%H%M")
-        except:
-            return filename
-
     def _find_source_files(self, layout):
         source_files = []
         file_names = os.listdir('%s/%ss' % (self._source_dir, layout))
-        for file_name in sorted(file_names, key=self._get_filename_timestamp):
+        for file_name in file_names:
             if fnmatch(file_name, '*.md'):
                 full_filename = '%s/%ss/%s' % (self._source_dir,
                                                layout,
@@ -74,7 +67,7 @@ class Builder(object):
         with open(filepath, 'w', 1) as save_fh:
             save_fh.write(content)
             save_fh.close()
-        print("-> '%s'" % filepath)
+        logging.info("-> '%s'" % filepath)
 
     def _gen_contexts(self, filenames):
         contexts = []
@@ -84,6 +77,7 @@ class Builder(object):
                 break
             context['rendered_html'] = self._render_html(context)
             contexts.append(context)
+        contexts.sort(key=lambda c: c['date'])
         return contexts
 
     def _write_contexts(self, contexts):
@@ -151,32 +145,32 @@ class Builder(object):
     def build(self):
         start_time = time.time()
 
-        print("\nGenerating Pages...")
-        print(("="*50))
+        logging.info("\nGenerating Pages...")
+        logging.info(("="*50))
         page_contexts = self._gen_contexts(self._page_files)
         self._write_contexts(page_contexts)
 
-        print("\nGenerating Posts...")
-        print(("="*50))
+        logging.info("\nGenerating Posts...")
+        logging.info(("="*50))
         post_contexts = self._gen_contexts(self._post_files)
         self._write_contexts(post_contexts)
 
-        print("\nGenerating Blog Index...")
-        print(("="*50))
+        logging.info("\nGenerating Blog Index...")
+        logging.info(("="*50))
         self._write_blog_index(post_contexts)
 
-        print("\nGenerating Feeds...")
-        print(("="*50))
+        logging.info("\nGenerating Feeds...")
+        logging.info(("="*50))
         self._write_feed('atom', post_contexts)
         self._write_feed('rss', post_contexts)
 
-        print("\nGenerating Sitemap...")
-        print(("="*50))
+        logging.info("\nGenerating Sitemap...")
+        logging.info(("="*50))
         self._write_sitemap(post_contexts, page_contexts)
 
-        print("\nCopying Static Files...")
-        print(("="*50))
+        logging.info("\nCopying Static Files...")
+        logging.info(("="*50))
 
         total_time = round(time.time() - start_time, 2)
-        print("\nGeneration Completed in %s seconds" % total_time)
+        logging.info("\nGeneration Completed in %s seconds" % total_time)
         self._copy_static()

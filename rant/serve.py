@@ -1,3 +1,4 @@
+import logging
 from rant.build import Builder
 from livereload import Server as LRServer
 
@@ -18,4 +19,4 @@ class Server(object):
             root=self._dest_dir,
             port=self._port
         )
-        print('Starting server on port: %s' % self._port)
+        logging.info('Starting server on port: %s' % self._port)

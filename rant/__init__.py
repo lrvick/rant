@@ -6,14 +6,11 @@ from rant.create import Creator
 from rant.build import Builder
 from rant.serve import Server
 
-root = logging.getLogger()
-root.setLevel(logging.INFO)
-
-ch = logging.StreamHandler(sys.stdout)
-ch.setLevel(logging.INFO)
-formatter = logging.Formatter('%(message)s')
-ch.setFormatter(formatter)
-root.addHandler(ch)
+logging.basicConfig(
+    format='%(message)s',
+    stream=sys.stdout,
+    level=logging.INFO
+)
 
 
 def create_parser():

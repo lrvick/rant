@@ -37,34 +37,47 @@ def create_parser():
         help='Build static site from your source templates and content'
     )
 
-    subparsers.add_parser(
+    serve_command = subparsers.add_parser(
         'serve',
         help='Start server that auto-builds on file-change for development'
     )
+    serve_command.add_argument(
+        '--host',
+        type=str,
+        default='::1',
+        help='IP address to host server on'
+    )
+    serve_command.add_argument(
+        '--port',
+        type=int,
+        default=8080,
+        help='Port to host server on'
+    )
 
-    return parser
+    return parser.parse_args()
 
+def process_args(master_parser):
 
-def process_args(args):
-
-    if args.parser == 'install':
+    parser = master_parser.parser
+    if parser == 'install':
         Installer('.').install()
         pass
 
-    if args.parser == 'create':
+    if parser == 'create':
         Creator('.').create()
         pass
 
-    if args.parser == 'build':
+    if parser == 'build':
         Builder('.', 'deploy').build()
         pass
 
-    if args.parser == 'serve':
-        Server('.', 'deploy').serve()
+    if parser == 'serve':
+        host = master_parser.host
+        port = master_parser.port
+        Server('.', 'deploy', host=host, port=port).serve()
         pass
 
 
 def main():
     parser = create_parser()
-    args = parser.parse_args()
-    process_args(args)
+    process_args(parser)
